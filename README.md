@@ -4,11 +4,14 @@
 
 ## Team Roster
 
+## Team Roster
+
 | Name             | GitHub Username |
 |------------------|------------------|
 | Yash Sawhney     | yashsawhney06    |
 | Neville Pethani  | npeth-umass      |
 | Jayden Zoll      | jzoll            |
+| Kehan Xu         | SpookyyTheGhost  |
 
 ## Team Agreement!!
 
