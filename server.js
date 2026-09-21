@@ -22,6 +22,10 @@ app.get('/', (req, res) => {
   );
 })
 
+app.get("/stocks", (req, res) => {
+  res.send("This is where we will be putting the stocks of congress"); //Change the text here
+});
+
 app.use((req, res) => {
   res.send("Page was not found :(");
 })
