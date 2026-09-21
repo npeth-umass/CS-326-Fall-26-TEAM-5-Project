@@ -24,3 +24,15 @@
 ## Project Idea/Overall Goal
 
 Our project tracks U.S. Congress members' individual stock trades alongside their voting records on related bills. We will surface potential conflicts of interest where a lawmaker voted on legislation affecting an industry, a certain sector, or a company in which they personally held stock in. This goes beyond the classroom because congressional stock trading has increasing public scrutiny, and existing disclosure data such as STOCK Act filings, roll-call votes, etc. are public but scattered and hard for ordinary citizens to cross reference, which could influence their voting. The application benefits voters and watchdog groups who want an easy way to ask "did a person vote on something they had a financial stake in?" without manually referencing or doing their own research. While we are unsure now, we expect the "corruption" methodology we use to grade to get more defined as we dig into the data and as our project develops.
+
+## Getting Set Up
+
+```bash
+git clone https://github.com/npeth-umass/CS-326-Fall-26-TEAM-5-Project
+cd "CS-326-Fall-26-TEAM-5-Project"
+npm init -y
+npm install express
+npm start
+```
+
+This will start a local server at port 3000. So just go to http://localhost:3000 and you should see the server running
