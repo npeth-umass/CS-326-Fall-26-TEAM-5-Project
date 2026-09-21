@@ -1,0 +1,22 @@
+{
+  "name": "groupproject",
+  "version": "1.0.0",
+  "description": "| Name             | GitHub Username | |------------------|------------------| | Yash Sawhney     | yashsawhney06    | | Neville Pethani  | npeth-umass      | | Jayden Zoll      | jzoll            | | Kehan Xu         | SpookyyTheGhost  |",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/npeth-umass/CS-326-Fall-26-TEAM-5-Project.git"
+  },
+  "keywords": [],
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/npeth-umass/CS-326-Fall-26-TEAM-5-Project/issues"
+  },
+  "homepage": "https://github.com/npeth-umass/CS-326-Fall-26-TEAM-5-Project#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
