@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/npeth-umass/CS-326-Fall-26-TEAM-5-Project#readme",
   "dependencies": {
+    "ejs": "^6.0.1",
     "express": "^5.2.1"
   }
 }
