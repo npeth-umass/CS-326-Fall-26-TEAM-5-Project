@@ -6,12 +6,12 @@
 
 ## Team Roster
 
-| Name             | GitHub Username |
-|------------------|------------------|
-| Yash Sawhney     | yashsawhney06    |
-| Neville Pethani  | npeth-umass      |
-| Jayden Zoll      | jzoll            |
-| Kehan Xu         | SpookyyTheGhost  |
+| Name            | GitHub Username |
+| --------------- | --------------- |
+| Yash Sawhney    | yashsawhney06   |
+| Neville Pethani | npeth-umass     |
+| Jayden Zoll     | jzoll           |
+| Kehan Xu        | SpookyyTheGhost |
 
 ## Team Agreement!!
 
@@ -30,7 +30,6 @@ Our project tracks U.S. Congress members' individual stock trades alongside thei
 ```bash
 git clone https://github.com/npeth-umass/CS-326-Fall-26-TEAM-5-Project
 cd "CS-326-Fall-26-TEAM-5-Project"
-npm init -y
 npm install express
 npm start
 ```
