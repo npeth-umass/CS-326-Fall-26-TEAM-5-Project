@@ -1,4 +1,5 @@
 import express from "express";
+import politicianRouter from "./routes/politician.js";
 
 const app = express();
 const PORT = process.env.port || 3000;
@@ -7,6 +8,8 @@ app.set("view engine", "ejs");
 app.set("views", "views");
 
 app.use(express.static("public"));
+app.use(express.json());
+app.use("/politicians", politicianRouter);
 
 app.get("/index", (req, res) => {
   res.render("index", { title: "Objective" });

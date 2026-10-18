@@ -1,0 +1,21 @@
+[
+  {
+    "name": "Warren, Elizabeth",
+    "party": "Democratic",
+    "state": "Massachusetts",
+    "chamber": "Senate"
+  },
+  {
+    "name": "Markey, Edward J.",
+    "party": "Democratic",
+    "state": "Massachusetts",
+    "chamber": "Senate"
+  },
+  {
+    "name": "Neal, Richard E.",
+    "party": "Democratic",
+    "state": "Massachusetts",
+    "district": 1,
+    "chamber": "House of Representatives"
+  }
+]
