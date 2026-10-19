@@ -35,8 +35,9 @@ app.get("/details", (req, res) => {
     more defined as we dig into the data and as our project develops.`);
 });
 
+
 app.get("/stocks", (req, res) => {
-  res.send("This is where we will be putting the stocks of congress"); //Change the text here
+  res.send("This is where we will be putting the stock trades of different congress members"); 
 });
 
 app.use((req, res) => {
