@@ -1,5 +1,6 @@
 import express from "express";
 import politicianRouter from "./routes/politician.js";
+import tradeRouter from "./routes/trade.js";
 
 const app = express();
 const PORT = process.env.port || 3000;
@@ -10,6 +11,7 @@ app.set("views", "views");
 app.use(express.static("public"));
 app.use(express.json());
 app.use("/politicians", politicianRouter);
+app.use("/trades", tradeRouter);
 
 app.get("/index", (req, res) => {
   res.render("index", { title: "Objective" });
