@@ -17,6 +17,8 @@ app.get("/index", (req, res) => {
   res.render("index", { title: "Objective" });
 });
 
+
+
 app.get("/details", (req, res) => {
   //Copied from our readme.md
   res.send(`Our project tracks U.S. Congress members'

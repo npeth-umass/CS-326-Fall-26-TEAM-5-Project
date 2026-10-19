@@ -1,1 +1,1 @@
-No AI used
+Used AI to make the HTML homepage look nicer - https://claude.ai/share/f5ce30bd-80d8-4f0e-a2a1-6258239fe767
