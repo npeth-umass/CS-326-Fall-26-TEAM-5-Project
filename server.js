@@ -35,8 +35,13 @@ app.get("/details", (req, res) => {
     more defined as we dig into the data and as our project develops.`);
 });
 
+app.get("/trades", (req, res) => {
+  //Copied from our readme.md
+  res.send(`This is where we will be tracking every trade by every politician in congress`);
+});
+
 app.get("/stocks", (req, res) => {
-  res.send("This is where we will be putting the stocks of congress"); //Change the text here
+  res.send("This is where we will be putting the stock trades of different congress members"); 
 });
 
 app.use((req, res) => {
