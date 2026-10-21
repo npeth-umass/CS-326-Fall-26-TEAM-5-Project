@@ -75,11 +75,13 @@ Response path:
 
 ## New Features
 
+```
 - Split the route handler into four layers: route, controller, service and repository.
 - Created Json files to permanentlys store data.
 - Added EJS files for each route and navigatation between them.
 - Added Home Page
 - Added CSS styling for each web page.
+```
 
 ## Design Decisions
 
