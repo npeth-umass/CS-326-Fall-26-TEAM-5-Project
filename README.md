@@ -88,3 +88,8 @@ Response path:
 Put the data in a json so we can transfer the data through commits. This is better than MongoDB because we can transfer data throughh commits.
 
 - Neville Pethani
+
+
+Put the check for a missing trades.json in the repository so it just returns an empty list if the file isn't there yet. This is better than putting it in the service because the service shouldn't care where the data is stored.
+
+- Yash Sawhney
