@@ -85,4 +85,6 @@ Response path:
 
 ## Design Decisions
 
-//write under here
+Put the data in a json so we can transfer the data through commits. This is better than MongoDB because we can transfer data throughh commits.
+
+- Neville Pethani
