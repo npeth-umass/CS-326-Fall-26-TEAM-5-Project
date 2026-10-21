@@ -88,3 +88,7 @@ Response path:
 Put the data in a json so we can transfer the data through commits. This is better than MongoDB because we can transfer data throughh commits.
 
 - Neville Pethani
+
+Used EJS files to display webpages instead of static HTML files. This way, we didn't have to include additional javascript file for each html file for the interface, additionally EJS provides more clarity as to what each element represents.
+
+- Kehan Xu
