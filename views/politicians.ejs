@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title><%= "Politicians" %></title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <%- include('partials/header') %>
+    <main>
+      <ul id="politicians">
+        <% politicians.forEach((politician, index) => { %>
+          <li data-id="<%= index %>" data-title="<%= politician.name %>" data-body="<%= politician.party %>">
+            <span class="entry-display"><strong><%= politician.name %>:</strong> <%= politician.party %></span>
+          </li>
+        <% }); %>
+      </ul>
+
+    </main>
+  </body>
+</html>

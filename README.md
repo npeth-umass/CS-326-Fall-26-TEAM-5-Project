@@ -35,3 +35,54 @@ npm start
 ```
 
 This will start a local server at port 3000. So just go to http://localhost:3000 and you should see the server running
+
+## System Diagram
+
+```
+                         Browser
+                            |
+              GET /politicians, , /trades...
+                            |
+                            v
+                  server.js (Express app)
+                            |
+              +-------------+--------------+
+              |                            |
+              v                            v
+     routes/politician.js          routes/trade.js
+              |                            |
+              v                            v
+ controllers/politicianController.js   controllers/tradeController.js
+              |                            |
+              v                            v
+ services/politicianService.js     services/tradeService.js
+              |                            |
+              v                            v
+ repositories/politicianRepository.js  repositories/tradeRepository.js
+              |                            |
+              v                            v
+     data/politicians.json          data/trades.json
+
+Response path:
+  repository -> service -> controller -> dtos/tradeDto.js
+      -> res.render('trades' / 'politicians' / 'details')
+      -> views/*.ejs + views/partials/header.ejs
+      -> HTML sent to Browser
+
+  Static files:
+  Browser -> public/style.css, public/index.html
+```
+
+## New Features
+
+```
+- Split the route handler into four layers: route, controller, service and repository.
+- Created Json files to permanentlys store data.
+- Added EJS files for each route and navigatation between them.
+- Added Home Page
+- Added CSS styling for each web page.
+```
+
+## Design Decisions
+
+//write under here

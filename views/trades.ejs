@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title><%= "Trades" %></title>
+    <link rel="stylesheet" href="/style.css">
+  </head>
+  <body>
+    <%- include('partials/header') %>
+    <main>
+      <ul id="trades">
+        <% trades.forEach((trade, index) => { %>
+          <li data-id="<%= index %>" data-title="<%= trade.name %>" data-body="<%= trade.stock %>">
+            <span class="entry-display"><strong><%= trade.name %>:</strong> <%= trade.stocks + ", " + trade.shares + ", " + trade.pricePerShare + "$/share, " + trade.totalSpent + "$ total spent" %></span>
+          </li>
+        <% }); %>
+      </ul>
+
+    </main>
+  </body>
+</html>

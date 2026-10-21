@@ -1,14 +1,16 @@
-import * as politicianService from '../services/politicianService.js';
+import * as politicianService from "../services/politicianService.js";
 
 export async function index(req, res) {
   const politicians = await politicianService.listPoliticians();
-  res.set('X-Total-Count', String(politicians.length));
-  res.status(200).json({ politicians, count: politicians.length });
+  res.set("X-Total-Count", String(politicians.length));
+  res
+    .status(200)
+    .render("politicians", { politicians, count: politicians.length });
 }
 
 export async function searchByName(req, res) {
   const politicians = await politicianService.listPoliticians(req.params.name);
-  res.set('X-Total-Count', String(politicians.length));
+  res.set("X-Total-Count", String(politicians.length));
   res.status(200).json({ politicians, count: politicians.length });
 }
 
