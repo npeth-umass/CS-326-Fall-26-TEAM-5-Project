@@ -1,8 +1,8 @@
-import * as tradeService from '../services/tradeService.js';
+import * as tradeService from "../services/tradeService.js";
 
 export async function index(req, res) {
   const trades = await tradeService.listTrades();
-  res.status(200).json({ trades, count: trades.length });
+  res.status(200).render("trades", { trades });
 }
 
 export async function create(req, res) {

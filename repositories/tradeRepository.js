@@ -1,10 +1,10 @@
-import fs from 'node:fs/promises';
+import fs from "node:fs/promises";
 
-const DATA_FILE = new URL('../data/trades.json', import.meta.url);
+const DATA_FILE = new URL("../data/trades.json", import.meta.url);
 
 async function readData() {
   try {
-    return JSON.parse(await fs.readFile(DATA_FILE, 'utf8'));
+    return JSON.parse(await fs.readFile(DATA_FILE, "utf8"));
   } catch {
     return [];
   }
