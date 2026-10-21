@@ -88,3 +88,7 @@ Response path:
 Put the data in a json so we can transfer the data through commits. This is better than MongoDB because we can transfer data throughh commits.
 
 - Neville Pethani
+
+Created a style.css file to organize the homepage/other pages and make the ui design look nice
+
+- Jayden Zoll
