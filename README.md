@@ -92,3 +92,7 @@ Put the data in a json so we can transfer the data through commits. This is bett
 Created a style.css file to organize the homepage/other pages and make the ui design look nice
 
 - Jayden Zoll
+
+Used EJS files to display webpages instead of static HTML files. This way, we didn't have to include additional javascript file for each html file for the interface, additionally EJS provides more clarity as to what each element represents.
+
+- Kehan Xu
