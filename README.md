@@ -96,3 +96,7 @@ Created a style.css file to organize the homepage/other pages and make the ui de
 Used EJS files to display webpages instead of static HTML files. This way, we didn't have to include additional javascript file for each html file for the interface, additionally EJS provides more clarity as to what each element represents.
 
 - Kehan Xu
+
+Put the check for a missing trades.json in the repository so it just returns an empty list if the file isn't there yet. This is better than putting it in the service because the service shouldn't care where the data is stored.
+
+- Yash Sawhney
