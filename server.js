@@ -29,8 +29,14 @@ app.get("/stocks", (req, res) => {
 });
 
 app.use((req, res) => {
-  res.send("Page was not found :(");
+  res.status(404).send('Page not found.');
 });
+
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).send('Something went wrong.');
+});
+
 
 app.listen(PORT, () => {
   console.log(`Port is ${PORT} and link is http://localhost:${PORT}`);
