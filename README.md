@@ -97,7 +97,7 @@ Put the data in a json so we can transfer the data through commits. This is bett
 
 - Neville Pethani
 
-Created a style.css file to organize the homepage/other pages and make the ui design look nice
+Created a style.css file to organize the homepage/other pages and make the ui design look nice. I ended up choosing to use a css instead of a inline in index.html because its reusable and I didnt want to have to copy and paste the html for multiple pages. Another reason I ended up choosing to use a style.css sheet was after conversing with Neville, we decided that it would look nice and neat if all of the code for formatting ws separated into a different file, making the index code easier to read.
 
 - Jayden Zoll
 
