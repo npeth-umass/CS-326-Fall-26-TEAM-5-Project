@@ -1,6 +1,6 @@
 
 import { Ok, Err } from '../result.js';
-import { getAll, create, removeByName } from '../repositories/politicianRepository.js';
+import { getAll, writeData } from '../repositories/politicianRepository.js';
 import { toPoliticianDto } from '../dtos/politicianDto.js';
 
 const REQUIRED_FIELDS = ['name', 'party', 'state', 'chamber'];
@@ -53,6 +53,22 @@ export async function listPoliticians(name) {
     : politicians;
 
   return matches.map(toPoliticianDto);
+}
+
+async function create(politician) {
+  const politicians = await readData();
+  politicians.push(politician);
+  await writeData(politicians);
+  return politician;
+}
+
+async function removeByName(name) {
+  const politicians = await readData();
+  const index = politicians.findIndex((politician) => politician.name === name);
+  if (index === -1) return false;
+  politicians.splice(index, 1);
+  await writeData(politicians);
+  return true;
 }
 
 export async function createPolitician(input) {

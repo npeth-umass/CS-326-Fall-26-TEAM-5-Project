@@ -36,6 +36,14 @@ npm start
 
 This will start a local server at port 3000. So just go to http://localhost:3000 and you should see the server running
 
+# How to Use
+
+1. Run `npm install` and then `npm start` then open http://localhost:3000 in your browser. You'll see the home page with a navbar at the top.
+2. Click **Politicians** in the navbar to see the list of Congress members we're tracking, with each one's name and party.
+3. Click **Trades** in the navbar to see the stock trades they've made. Each trade shows the politician's name, the stock, the number of shares, the price per share, and the total spent.
+4. To add a trade fill out the form on the Trades page with the politician's name, the stock, the number of shares, and the price per share, then click **Add Trade**. The new trade shows up in the list on the page.
+5. If you leave out a required field, the page shows an error message saying what's missing instead of saving the trade.
+
 ## System Diagram
 
 ```
@@ -89,7 +97,7 @@ Put the data in a json so we can transfer the data through commits. This is bett
 
 - Neville Pethani
 
-Created a style.css file to organize the homepage/other pages and make the ui design look nice
+Created a style.css file to organize the homepage/other pages and make the ui design look nice. I ended up choosing to use a css instead of a inline in index.html because its reusable and I didnt want to have to copy and paste the html for multiple pages. Another reason I ended up choosing to use a style.css sheet was after conversing with Neville, we decided that it would look nice and neat if all of the code for formatting ws separated into a different file, making the index code easier to read.
 
 - Jayden Zoll
 
