@@ -14,10 +14,10 @@
     "totalSpent": "5250"
   },
   {
-    "name": "Neal, Richard E.",
-    "stocks": "Meta",
-    "shares": "500",
-    "pricePerShare": "5",
-    "totalSpent": "2500"
+    "name": "Trump, Donald",
+    "stock": "Nvidia",
+    "shares": 20,
+    "pricePerShare": 20,
+    "totalSpent": 400
   }
 ]

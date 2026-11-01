@@ -78,7 +78,7 @@ Response path:
       -> HTML sent to Browser
 
   Static files:
-  Browser -> public/style.css, public/index.html
+  Browser -> public/style.css, public/index.html, public/form.js
 ```
 
 ## New Features

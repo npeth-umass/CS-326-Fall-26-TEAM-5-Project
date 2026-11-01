@@ -18,3 +18,11 @@ export async function create(trade) {
   await fs.writeFile(DATA_FILE, JSON.stringify(trades, null, 2));
   return trade;
 }
+
+export async function removeAt(index) {
+  const trades = await readData();
+  if (index < 0 || index >= trades.length) return false;
+  trades.splice(index, 1);
+  await fs.writeFile(DATA_FILE, JSON.stringify(trades, null, 2));
+  return true;
+}
