@@ -1,14 +1,14 @@
 [
   {
     "name": "Warren, Elizabeth",
-    "stocks": "SpaceX",
+    "stock": "SpaceX",
     "shares": "200",
     "pricePerShare": "15",
     "totalSpent": "2100"
   },
   {
     "name": "Markey, Edward J.",
-    "stocks": "Google",
+    "stock": "Google",
     "shares": "50",
     "pricePerShare": "150",
     "totalSpent": "5250"
