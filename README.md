@@ -45,9 +45,7 @@ This will start a local server at port 3000. So just go to http://localhost:3000
 5. If you leave out a required field, the page shows an error message saying what's missing instead of saving the trade.
 
 ## System Diagram
-
-```
-                         Browser
+                        Browser
                             |
               GET /politicians, , /trades...
                             |
@@ -71,16 +69,6 @@ This will start a local server at port 3000. So just go to http://localhost:3000
               v                            v
      data/politicians.json          data/trades.json
 
-Response path:
-  repository -> service -> controller -> dtos/tradeDto.js
-      -> res.render('trades' / 'politicians' / 'details')
-      -> views/*.ejs + views/partials/header.ejs
-      -> HTML sent to Browser
-
-  Static files:
-  Browser -> public/style.css, public/index.html, public/form.js
-```
-
 ## New Features
 
 ```
@@ -89,6 +77,7 @@ Response path:
 - Added EJS files for each route and navigatation between them.
 - Added Home Page
 - Added CSS styling for each web page.
+- Added Jest tests for every validation rule our service layer enforces, to use the test right npm test into the terminal
 ```
 
 ## Design Decisions
@@ -108,3 +97,7 @@ Used EJS files to display webpages instead of static HTML files. This way, we di
 Put the check for a missing trades.json in the repository so it just returns an empty list if the file isn't there yet. This is better than putting it in the service because the service shouldn't care where the data is stored.
 
 - Yash Sawhney
+
+For the service-layer tests, I replaced the repositories with test doubles using `jest.unstable_mockModule` similar to how we were taught to do it in unit 13. One alternative was to test the services against the real repositories, but I think the mocked version is better for these tests because they are about our validation rules. With mocks the suite runs in under a second needs nothing running and leaves no data behind.
+
+- Jayden Zoll
