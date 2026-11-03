@@ -84,9 +84,12 @@ if (form && list) {
     showError("");
 
     try {
-      const response = await fetch(`${endpoint}/${encodeURIComponent(li.dataset.id)}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `${endpoint}/${encodeURIComponent(li.dataset.id)}`,
+        {
+          method: "DELETE",
+        },
+      );
 
       if (response.status === 204) {
         li.remove();

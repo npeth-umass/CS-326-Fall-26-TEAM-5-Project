@@ -84,11 +84,44 @@ Response path:
 ## New Features
 
 ```
-- Split the route handler into four layers: route, controller, service and repository.
-- Created Json files to permanentlys store data.
-- Added EJS files for each route and navigatation between them.
-- Added Home Page
-- Added CSS styling for each web page.
+## Features:
+- Code is split into four layers: routes, controllers, services and repositories.
+- Data is stored permanently in JSON file
+- Each page is an EJS template with a shared header for navigation.
+- Home page with links to the politicians and trades pages.
+- CSS styling for every page.
+- Forms on the Politicians and Trades pages let you add and delete entries in the browser.
+
+## Pages:
+| GET | `/` | Home page with links to politicians and trades |
+| GET | `/politicians` | List of politicians + create form |
+| GET | `/politicians/:name` | Details for one politician (In JSON currently) |
+| GET | `/trades` | List of trades for each politician |
+
+## Adding or Deleting:
+- Open `/politicians` or `/trades`.
+- There is a form that you can fill in and add/remove entries with
+- Server will notify you if there is a missing field/other errors
+
+**Create a politician**
+
+| Field | Required | Notes |
+|---|---|---|
+| `name` | Yes | Format "Last, First". Must be unique (case-insensitive). |
+| `party` | Yes | Text |
+| `state` | No | Text, e.g. `MA` |
+| `chamber` | No | Text, e.g. `Senate` |
+
+**Create a trade**
+
+| Field | Required | Notes |
+|---|---|---|
+| `name` | Yes | The politician's name |
+| `stock` | Yes | Text, e.g. `Google` |
+| `shares` | Yes | Positive whole number |
+| `pricePerShare` | Yes | Positive number |
+
+`totalSpent` is calculated by the server (`shares × pricePerShare`)
 ```
 
 ## Design Decisions
