@@ -8,14 +8,25 @@
   <body>
     <%- include('partials/header') %>
     <main>
-      <ul id="politicians">
-        <% politicians.forEach((politician, index) => { %>
-          <li data-id="<%= index %>" data-title="<%= politician.name %>" data-body="<%= politician.party %>">
-            <span class="entry-display"><strong><%= politician.name %>:</strong> <%= politician.party %></span>
+      <h1>Politicians</h1>
+
+      <form id="entry-form" class="entry-form" data-endpoint="/politicians" data-kind="politician">
+        <h2>Add a politician</h2>
+        <p class="form-error" role="alert" hidden></p>
+        <input type="text" name="name" placeholder="Name (Last, First)">
+        <input type="text" name="party" placeholder="Party">
+        <button type="submit">Add Politician</button>
+      </form>
+
+      <ul id="entries">
+        <% politicians.forEach((politician) => { %>
+          <li data-id="<%= politician.name %>">
+            <span><strong><%= politician.name %>:</strong> <%= politician.party %></span>
+            <button class="delete-btn" type="button">Delete</button>
           </li>
         <% }); %>
       </ul>
-
     </main>
+    <script src="/form.js" defer></script>
   </body>
 </html>

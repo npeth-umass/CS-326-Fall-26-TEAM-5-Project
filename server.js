@@ -30,14 +30,26 @@ app.get("/stocks", (req, res) => {
 });
 
 app.use((req, res) => {
-  res.status(404).send('Page not found.');
+  res.status(404).send("Page not found.");
 });
 
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).send('Something went wrong.');
-});
+  if (res.headersSent) return next(err);
 
+  let status = err.status || err.statusCode || 500;
+  let message = err.message;
+
+  if (err.type === "entity.parse.failed") {
+    status = 400;
+    message = "Malformed JSON";
+  }
+  if (status >= 500) {
+    console.error(err);
+    message = "Something went wrong.";
+  }
+
+  res.status(status).json({ error: message });
+});
 
 app.listen(PORT, () => {
   console.log(`Port is ${PORT} and link is http://localhost:${PORT}`);

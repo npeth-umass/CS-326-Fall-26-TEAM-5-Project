@@ -1,9 +1,9 @@
+import { Ok, Err } from "../result.js";
+import { getAll, writeData } from "../repositories/politicianRepository.js";
+import { toPoliticianDto } from "../dtos/politicianDto.js";
 
-import { Ok, Err } from '../result.js';
-import { getAll, writeData } from '../repositories/politicianRepository.js';
-import { toPoliticianDto } from '../dtos/politicianDto.js';
-
-const REQUIRED_FIELDS = ['name', 'party', 'state', 'chamber'];
+const REQUIRED_FIELDS = ["name", "party"];
+const OPTIONAL_FIELDS = ["state", "chamber"]; //making this optional for now for form implementation. Can expand to include this once UI is finalized.
 
 const normalizeName = (name) => name.trim().toLowerCase();
 
@@ -11,20 +11,30 @@ function validatePolitician(input = {}) {
   const politician = {};
 
   for (const field of REQUIRED_FIELDS) {
-    if (typeof input[field] !== 'string' || !input[field].trim()) {
+    if (typeof input[field] !== "string" || !input[field].trim()) {
       return Err({ status: 400, message: `${field} is required` });
     }
 
     politician[field] = input[field].trim();
   }
 
-  if (input.district !== undefined && input.district !== null && input.district !== '') {
+  for (const field of OPTIONAL_FIELDS) {
+    if (typeof input[field] === "string" && input[field].trim()) {
+      politician[field] = input[field].trim();
+    }
+  }
+
+  if (
+    input.district !== undefined &&
+    input.district !== null &&
+    input.district !== ""
+  ) {
     const district = Number(input.district);
 
     if (!Number.isInteger(district) || district < 0) {
       return Err({
         status: 400,
-        message: 'district must be a non-negative whole number'
+        message: "district must be a non-negative whole number",
       });
     }
 
@@ -33,8 +43,8 @@ function validatePolitician(input = {}) {
 
   // I genuinely don't know why they called it a 'bioguide' but it's just a unique
   // id number for each congress person
-  for (const field of ['bioguideId', 'imageUrl']) {
-    if (typeof input[field] === 'string' && input[field].trim()) {
+  for (const field of ["bioguideId", "imageUrl"]) {
+    if (typeof input[field] === "string" && input[field].trim()) {
       politician[field] = input[field].trim();
     }
   }
@@ -44,11 +54,11 @@ function validatePolitician(input = {}) {
 
 export async function listPoliticians(name) {
   const politicians = await getAll();
-  const search = typeof name === 'string' ? normalizeName(name) : '';
+  const search = typeof name === "string" ? normalizeName(name) : "";
 
   const matches = search
     ? politicians.filter((politician) =>
-        normalizeName(politician.name).includes(search)
+        normalizeName(politician.name).includes(search),
       )
     : politicians;
 
@@ -56,14 +66,14 @@ export async function listPoliticians(name) {
 }
 
 async function create(politician) {
-  const politicians = await readData();
+  const politicians = await getAll();
   politicians.push(politician);
   await writeData(politicians);
   return politician;
 }
 
 async function removeByName(name) {
-  const politicians = await readData();
+  const politicians = await getAll();
   const index = politicians.findIndex((politician) => politician.name === name);
   if (index === -1) return false;
   politicians.splice(index, 1);
@@ -79,10 +89,12 @@ export async function createPolitician(input) {
   const politicians = await getAll();
   const name = normalizeName(validation.value.name);
 
-  if (politicians.some((politician) => normalizeName(politician.name) === name)) {
+  if (
+    politicians.some((politician) => normalizeName(politician.name) === name)
+  ) {
     return Err({
       status: 409,
-      message: `A politician named "${validation.value.name}" already exists`
+      message: `A politician named "${validation.value.name}" already exists`,
     });
   }
 
@@ -91,14 +103,14 @@ export async function createPolitician(input) {
 }
 
 export async function deletePolitician(name) {
-  if (typeof name !== 'string' || !name.trim()) {
-    return Err({ status: 400, message: 'name is required' });
+  if (typeof name !== "string" || !name.trim()) {
+    return Err({ status: 400, message: "name is required" });
   }
 
   const removed = await removeByName(name.trim());
 
   if (!removed) {
-    return Err({ status: 404, message: 'Politician not found' });
+    return Err({ status: 404, message: "Politician not found" });
   }
 
   return Ok(null);
