@@ -1,5 +1,5 @@
 import { Ok, Err } from "../result.js";
-import { getAll, create, removeAt } from "../repositories/tradeRepository.js";
+import { getAll, create, removeById } from "../repositories/tradeRepository.js";
 
 const validateTrades = ({ name, stock, shares, pricePerShare } = {}) => {
   name = typeof name === "string" ? name.trim() : "";
@@ -51,13 +51,8 @@ export async function createTrade(input = {}) {
   return Ok(created);
 }
 
-export async function deleteTrade(rawId) {
-  // Trades have no id field, so the id is the trade's position in the list
-  const id = Number(rawId);
-  if (!Number.isInteger(id) || id < 0) {
-    return Err({ status: 404, message: "Trade not found" });
-  }
-  const removed = await removeAt(id);
+export async function deleteTrade(id) {
+  const removed = await removeById(id);
   if (!removed) return Err({ status: 404, message: "Trade not found" });
   return Ok(null);
 }

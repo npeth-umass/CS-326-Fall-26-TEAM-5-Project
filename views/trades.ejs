@@ -23,8 +23,8 @@
       </form>
 
       <ul id="entries">
-        <% trades.forEach((trade, index) => { %>
-          <li data-id="<%= index %>">
+        <% trades.forEach((trade) => { %>
+          <li data-id="<%= trade._id %>">
             <span><strong><%= trade.name %>:</strong> <%= trade.stock %>, <%= trade.shares %> shares at $<%= trade.pricePerShare %>/share, $<%= trade.totalSpent %> total</span>
             <button class="delete-btn" type="button">Delete</button>
           </li>

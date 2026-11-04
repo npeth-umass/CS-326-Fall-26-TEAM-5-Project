@@ -144,3 +144,13 @@ Put the check for a missing trades.json in the repository so it just returns an 
 - Yash Sawhney
 
 ### Sprint 3 Design Decisions
+
+
+## Sprint 3: MongoDB Repository
+
+The trades feature now saves to MongoDB instead of data/trades.json and the repository (repositories/tradeRepository.js) uses a Mongoose schema (models/trade.js) with per record operations: getAll, findById, create, updateById, and removeById. To see it, start MongoDB, run `npm run seed` to load the starting trades, then run `npm start` and open /trades. Trades you add or delete stay changed after restarting the server.
+
+Exceptions: the routes and controller did not change while three other places did because they all assumed a trade's id was its position in the array:
+- views/trades.ejs now puts trade._id on each list item instead of the list index
+- public/form.js uses the _id from the server for new trades, and the function that renumbered ids after an add or delete was removed
+- services/tradeService.js deleteTrade no longer converts the id to a number, it just passes it to removeById

@@ -39,14 +39,6 @@ if (form && list) {
     return li;
   }
 
-  // Trades are identified by list position, so ids shift after an add or delete
-  function renumberTrades() {
-    if (kind !== "trade") return;
-    list.querySelectorAll("li").forEach((li, index) => {
-      li.dataset.id = index;
-    });
-  }
-
   form.addEventListener("submit", async (event) => {
     event.preventDefault(); // stop the browser's normal form submit
     showError("");
@@ -66,9 +58,8 @@ if (form && list) {
         return;
       }
 
-      const id = kind === "trade" ? list.children.length : result.name;
+      const id = kind === "trade" ? result._id : result.name;
       list.append(makeListItem(result, id));
-      renumberTrades();
       form.reset();
     } catch {
       showError("Could not reach the server.");
@@ -93,8 +84,7 @@ if (form && list) {
 
       if (response.status === 204) {
         li.remove();
-        renumberTrades();
-      } else {
+        } else {
         const result = await response.json().catch(() => ({}));
         showError(result.error || "Could not delete.");
       }
