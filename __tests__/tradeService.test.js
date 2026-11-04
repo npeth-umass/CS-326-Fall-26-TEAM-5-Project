@@ -3,11 +3,11 @@ import { jest } from '@jest/globals';
 jest.unstable_mockModule('../repositories/tradeRepository.js', () => ({
   getAll: jest.fn(),
   create: jest.fn(),
-  removeAt: jest.fn(),
+  removeById: jest.fn(),
 }));
 
 const { createTrade, deleteTrade } = await import('../services/tradeService.js');
-const { create, removeAt } = await import('../repositories/tradeRepository.js');
+const { create, removeById } = await import('../repositories/tradeRepository.js');
 const valid = { name: 'Warren, Elizabeth', stock: 'NVDA', shares: '10', pricePerShare: '120.5' };
 
 beforeEach(() => {
@@ -99,32 +99,20 @@ describe('createTrade', () => {
 
 describe('deleteTrade', () => {
   test('removes a trade that exists', async () => {
-    removeAt.mockResolvedValueOnce(true);
+    removeById.mockResolvedValueOnce(true);
 
-    const result = await deleteTrade('2');
+    const result = await deleteTrade('6650f1c2a1b2c3d4e5f60718');
 
     expect(result.ok).toBe(true);
-    expect(removeAt).toHaveBeenCalledWith(2); // the id is converted to a number
+    expect(removeById).toHaveBeenCalledWith('6650f1c2a1b2c3d4e5f60718');
   });
 
-  test('returns 404 when the repository finds no trade at that position', async () => {
-    removeAt.mockResolvedValueOnce(false);
+  test('returns 404 when the trade does not exist', async () => {
+    removeById.mockResolvedValueOnce(false);
 
-    const result = await deleteTrade('99');
+    const result = await deleteTrade('6650f1c2a1b2c3d4e5f60718');
 
     expect(result.ok).toBe(false);
     expect(result.error).toEqual({ status: 404, message: 'Trade not found' });
-  });
-
-  test.each([
-    ['not a number', 'abc'],
-    ['negative', '-1'],
-    ['a decimal', '1.5'],
-  ])('returns 404 without touching the repository when the id is %s', async (_description, id) => {
-    const result = await deleteTrade(id);
-
-    expect(result.ok).toBe(false);
-    expect(result.error).toEqual({ status: 404, message: 'Trade not found' });
-    expect(removeAt).not.toHaveBeenCalled();
   });
 });

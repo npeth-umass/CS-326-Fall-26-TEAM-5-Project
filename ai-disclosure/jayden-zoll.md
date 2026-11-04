@@ -12,4 +12,5 @@ One thing it wanted me to implement was a classic no javascript version, but I d
 
 AI helped me edit the __tests__ and make sure they worked. It also helped me make sure everything was covered by the tests
 When the politician tests failed, AI found the cause: politicianService.js had its own  create  and  removeByName helpers that called functions that didn't exist. AI wrote the fix, which moved those functions into  politicianRepository.js. I applied it and confirmed all 67 tests pass.
+Had to have AI help me with a merge conflict and resolve it
 

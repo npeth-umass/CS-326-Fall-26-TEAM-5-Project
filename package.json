@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
     "seed": "node scripts/seed.js"
   },
   "repository": {
@@ -20,11 +20,10 @@
   "homepage": "https://github.com/npeth-umass/CS-326-Fall-26-TEAM-5-Project#readme",
   "dependencies": {
     "ejs": "^6.0.1",
-    "express": "^5.3.0"
+    "express": "^5.3.0",
+    "mongoose": "^9.11.4"
   },
   "devDependencies": {
     "jest": "^30.5.2"
-    "express": "^5.3.0",
-    "mongoose": "^9.11.4"
   }
 }

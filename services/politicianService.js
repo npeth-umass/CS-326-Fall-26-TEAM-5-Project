@@ -1,5 +1,5 @@
 import { Ok, Err } from "../result.js";
-import { getAll, writeData } from "../repositories/politicianRepository.js";
+import { getAll, create, removeByName } from "../repositories/politicianRepository.js";
 import { toPoliticianDto } from "../dtos/politicianDto.js";
 
 const REQUIRED_FIELDS = ['name', 'party', 'state', 'chamber'];
