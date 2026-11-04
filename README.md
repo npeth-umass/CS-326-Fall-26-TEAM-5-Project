@@ -142,6 +142,10 @@ Put the check for a missing trades.json in the repository so it just returns an 
 
 - Yash Sawhney
 
+For Sprint 3, I switched trade deletes to use MongoDB's _id instead of the trade's position in the list as otherwise we would've had to keep using the position by sorting the trades the same way every time and deleting the "nth" one. That would have meant fewer changes, but the position shifts whenever someone else adds or deletes a trade so a Delete button could remove the wrong trade. Using _id cost us changes to trades.ejs, form.js, and deleteTrade in the service, but each Delete button now always points at the same trade.
+
+- Yash Sawhney
+
 ## Sprint 3: MongoDB Repository
 
 The trades feature now saves to MongoDB instead of data/trades.json and the repository (repositories/tradeRepository.js) uses a Mongoose schema (models/trade.js) with per record operations: getAll, findById, create, updateById, and removeById. To see it, start MongoDB, run `npm run seed` to load the starting trades, then run `npm start` and open /trades. Trades you add or delete stay changed after restarting the server.
@@ -150,3 +154,5 @@ Exceptions: the routes and controller did not change while three other places di
 - views/trades.ejs now puts trade._id on each list item instead of the list index
 - public/form.js uses the _id from the server for new trades, and the function that renumbered ids after an add or delete was removed
 - services/tradeService.js deleteTrade no longer converts the id to a number, it just passes it to removeById
+
+Politicians also moved to MongoDB (models/politician.js, repositories/politicianRepository.js) where Politicians are still deleted by name, so the view and form.js didn't change, but services/politicianService.js did as it had its own create and removeByName functions that read and rewrote the whole JSON array so those moved into the repository.
