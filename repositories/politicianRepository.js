@@ -1,38 +1,38 @@
 import mongoose from "mongoose";
-import { Politician } from "../models/politician.js";
 
-const isValidId = (id) => mongoose.isValidObjectId(id);
+const politicianSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    party: { type: String, required: true },
+    state: { type: String },
+    chamber: { type: String },
+    district: { type: Number },
+    bioguideId: { type: String },
+    imageUrl: { type: String },
+  },
+  { timestamps: true },
+);
 
-export async function getAll() {
-  return Politician.find().sort({ createdAt: 1 }).lean();
-}
+export const Politician = mongoose.model("Politician", politicianSchema);
 
-export async function findById(id) {
-  if (!isValidId(id)) return null;
-  return Politician.findById(id).lean();
-}
+export const isValidId = (id) => mongoose.Types.ObjectId.isValid(id);
 
-export async function create(politician) {
-  const created = await Politician.create(politician);
-  return created.toObject();
-}
+export const getAll = async () => Politician.find().lean();
 
-export async function updateById(id, changes) {
-  if (!isValidId(id)) return null;
-  return Politician.findByIdAndUpdate(id, changes, {
-    returnDocument: "after",
-    runValidators: true,
-  }).lean();
-}
+export const findById = async (id) => Politician.findById(id).lean();
 
-export async function removeById(id) {
-  if (!isValidId(id)) return false;
-  const removed = await Politician.findByIdAndDelete(id);
-  return removed !== null;
-}
+export const findByName = async (name) => Politician.findOne({ name }).lean();
 
-// The Politicians page deletes by name, so this one stays too
-export async function removeByName(name) {
-  const removed = await Politician.findOneAndDelete({ name });
-  return removed !== null;
-}
+export const create = async (data) =>
+  (await Politician.create(data)).toObject();
+
+export const updateById = async (id, data) =>
+  Politician.findByIdAndUpdate(id, data, { new: true }).lean();
+
+export const removeById = async (id) => {
+  await Politician.findByIdAndDelete(id);
+};
+
+export const removeByName = async (name) => {
+  await Politician.findOneAndDelete({ name });
+};

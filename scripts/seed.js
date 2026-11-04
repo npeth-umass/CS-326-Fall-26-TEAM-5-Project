@@ -3,8 +3,8 @@
 import fs from "node:fs/promises";
 import mongoose from "mongoose";
 import { connectDB } from "../db.js";
-import { Trade } from "../models/trade.js";
-import { Politician } from "../models/politician.js";
+import { Trade } from "../repositories/tradeRepository.js";
+import { Politician } from "../repositories/politicianRepository.js";
 
 const file = new URL("../data/trades.json", import.meta.url);
 const politiciansFile = new URL("../data/politicians.json", import.meta.url);

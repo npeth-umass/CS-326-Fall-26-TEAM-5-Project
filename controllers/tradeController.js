@@ -1,4 +1,5 @@
 import * as tradeService from "../services/tradeService.js";
+import { isValidId } from "../repositories/tradeRepository.js";
 
 async function renderPage(res, status, error = null, values = {}) {
   const trades = await tradeService.listTrades();
@@ -22,7 +23,12 @@ export async function create(req, res) {
 
 // DELETE /trades/:id: used by form.js
 export async function destroy(req, res) {
-  const result = await tradeService.deleteTrade(req.params.id);
+  const { id } = req.params;
+  if (!isValidId(id)) {
+    res.status(400).json({ error: "id must be a valid id" });
+    return;
+  }
+  const result = await tradeService.deleteTrade(id);
   if (!result.ok) {
     res.status(result.error.status).json({ error: result.error.message });
     return;

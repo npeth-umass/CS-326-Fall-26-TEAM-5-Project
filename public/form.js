@@ -58,7 +58,7 @@ if (form && list) {
         return;
       }
 
-      const id = kind === "trade" ? result._id : result.name;
+      const id = kind === "trade" ? result.id : result.name;
       list.append(makeListItem(result, id));
       form.reset();
     } catch {

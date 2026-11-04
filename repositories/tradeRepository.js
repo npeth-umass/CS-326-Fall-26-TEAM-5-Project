@@ -1,33 +1,29 @@
 import mongoose from "mongoose";
-import { Trade } from "../models/trade.js";
 
-// An id that isn't a valid ObjectId can't match anything, so treat it as not found
-const isValidId = (id) => mongoose.isValidObjectId(id);
+const tradeSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    stock: { type: String, required: true },
+    shares: { type: Number, required: true },
+    pricePerShare: { type: Number, required: true },
+    totalSpent: { type: Number, required: true },
+  },
+  { timestamps: true },
+);
 
-export async function getAll() {
-  return Trade.find().sort({ createdAt: 1 }).lean();
-}
+export const Trade = mongoose.model("Trade", tradeSchema);
 
-export async function findById(id) {
-  if (!isValidId(id)) return null;
-  return Trade.findById(id).lean();
-}
+export const isValidId = (id) => mongoose.Types.ObjectId.isValid(id);
 
-export async function create(trade) {
-  const created = await Trade.create(trade);
-  return created.toObject();
-}
+export const getAll = async () => Trade.find().lean();
 
-export async function updateById(id, changes) {
-  if (!isValidId(id)) return null;
-  return Trade.findByIdAndUpdate(id, changes, {
-    returnDocument: "after",
-    runValidators: true,
-  }).lean();
-}
+export const findById = async (id) => Trade.findById(id).lean();
 
-export async function removeById(id) {
-  if (!isValidId(id)) return false;
-  const removed = await Trade.findByIdAndDelete(id);
-  return removed !== null;
-}
+export const create = async (data) => (await Trade.create(data)).toObject();
+
+export const updateById = async (id, data) =>
+  Trade.findByIdAndUpdate(id, data, { new: true }).lean();
+
+export const removeById = async (id) => {
+  await Trade.findByIdAndDelete(id);
+};

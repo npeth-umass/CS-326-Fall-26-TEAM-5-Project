@@ -1,5 +1,5 @@
 import { Ok, Err } from "../result.js";
-import { getAll, create, removeByName } from "../repositories/politicianRepository.js";
+import { getAll, findByName, create, removeByName } from "../repositories/politicianRepository.js";
 import { toPoliticianDto } from "../dtos/politicianDto.js";
 
 const REQUIRED_FIELDS = ["name", "party"];
@@ -91,11 +91,11 @@ export async function deletePolitician(name) {
     return Err({ status: 400, message: "name is required" });
   }
 
-  const removed = await removeByName(name.trim());
-
-  if (!removed) {
+  const existing = await findByName(name.trim());
+  if (!existing) {
     return Err({ status: 404, message: "Politician not found" });
   }
 
+  await removeByName(name.trim());
   return Ok(null);
 }
