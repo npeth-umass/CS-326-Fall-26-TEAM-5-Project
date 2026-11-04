@@ -1,0 +1,11 @@
+<li>
+  <span><strong><%= politician.name %>:</strong> <%= politician.party %></span>
+  <button
+    class="delete-btn"
+    type="button"
+    hx-delete="/politicians/<%= encodeURIComponent(politician.name) %>"
+    hx-target="closest li"
+    hx-swap="outerHTML"
+    hx-disabled-elt="this"
+  >Delete</button>
+</li>
