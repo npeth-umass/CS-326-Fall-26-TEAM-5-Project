@@ -151,11 +151,12 @@ For Sprint 3, I switched trade deletes to use MongoDB's _id instead of the trade
 
 ## Sprint 3: MongoDB Repository
 
-The trades feature now saves to MongoDB instead of data/trades.json and the repository (repositories/tradeRepository.js) uses a Mongoose schema (models/trade.js) with per record operations: getAll, findById, create, updateById, and removeById. To see it, start MongoDB, run `npm run seed` to load the starting trades, then run `npm start` and open /trades. Trades you add or delete stay changed after restarting the server.
+The trades and politicians features save to MongoDB instead of data/trades.json and data/politicians.json and like Unit 12 each repository (repositories/tradeRepository.js and repositories/politicianRepository.js) has its Mongoose schema in it with per record operations: getAll, findById, create, updateById, and removeById. The repositories only talk to MongoDB while all the checks like validation, duplicate names, and returning 404 when something isn't there are in the services. To see it, start MongoDB, run `npm run seed` to load the starting trades and politicians, then run `npm start` and open /trades or /politicians. Anything you add or delete stays changed after restarting the server. If you're running it on your laptop instead of the dev container, start it with `MONGODB_URI=mongodb://127.0.0.1:27017/devdb npm start`.
 
-Exceptions: the routes and controller did not change while three other places did because they all assumed a trade's id was its position in the array:
-- views/trades.ejs now puts trade._id on each list item instead of the list index
-- public/form.js uses the _id from the server for new trades, and the function that renumbered ids after an add or delete was removed
-- services/tradeService.js deleteTrade no longer converts the id to a number, it just passes it to removeById
+The routes did not change, but a few places did because they assumed a trade's id was its position in the array:
+- dtos/tradeDto.js turns _id into id
+- views/trades.ejs and public/form.js use the real id, and the renumbering function was removed
+- services/tradeService.js deleteTrade checks findById for a 404 before removeById
+- controllers/tradeController.js returns 400 for an invalid id
 
-Politicians also moved to MongoDB (models/politician.js, repositories/politicianRepository.js) where Politicians are still deleted by name, so the view and form.js didn't change, but services/politicianService.js did as it had its own create and removeByName functions that read and rewrote the whole JSON array so those moved into the repository.
+Politicians are still deleted by name, so their view and form.js didn't change, but politicianService.js now calls the repository instead of rewriting the JSON array, and uses findByName to return 404 before removeByName.
