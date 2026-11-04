@@ -1,0 +1,15 @@
+<form
+  id="entry-form"
+  class="entry-form"
+  hx-post="/politicians"
+  hx-target="#entries"
+  hx-swap="beforeend"
+  hx-disabled-elt="find button"
+  <% if (locals.oob) { %>hx-swap-oob="true"<% } %>
+>
+  <h2>Add a politician</h2>
+  <p id="status" class="form-error" role="alert"></p>
+  <input type="text" name="name" placeholder="Name (Last, First)">
+  <input type="text" name="party" placeholder="Party">
+  <button type="submit">Add Politician</button>
+</form>

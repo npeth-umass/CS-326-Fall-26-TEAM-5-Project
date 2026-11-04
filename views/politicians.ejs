@@ -4,29 +4,34 @@
     <meta charset="UTF-8">
     <title><%= "Politicians" %></title>
     <link rel="stylesheet" href="/style.css">
+    <meta
+      name="htmx-config"
+      content='{
+        "timeout": 5000,
+        "responseHandling": [
+          { "code": "204", "swap": false },
+          { "code": "[23]..", "swap": true },
+          { "code": "[45]..", "swap": true, "error": true, "target": "#status", "swapOverride": "innerHTML" }
+        ]
+      }'
+    >
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   </head>
-  <body>
+  <body
+    hx-on::send-error="document.querySelector('#status').textContent = 'Could not reach the server.'"
+    hx-on::timeout="document.querySelector('#status').textContent = 'The server did not answer within five seconds.'"
+  >
     <%- include('partials/header') %>
     <main>
       <h1>Politicians</h1>
 
-      <form id="entry-form" class="entry-form" data-endpoint="/politicians" data-kind="politician">
-        <h2>Add a politician</h2>
-        <p class="form-error" role="alert" hidden></p>
-        <input type="text" name="name" placeholder="Name (Last, First)">
-        <input type="text" name="party" placeholder="Party">
-        <button type="submit">Add Politician</button>
-      </form>
+      <%- include('partials/politicians-form') %>
 
       <ul id="entries">
         <% politicians.forEach((politician) => { %>
-          <li data-id="<%= politician.name %>">
-            <span><strong><%= politician.name %>:</strong> <%= politician.party %></span>
-            <button class="delete-btn" type="button">Delete</button>
-          </li>
+          <%- include('partials/politician', { politician }) %>
         <% }); %>
       </ul>
     </main>
-    <script src="/form.js" defer></script>
   </body>
 </html>

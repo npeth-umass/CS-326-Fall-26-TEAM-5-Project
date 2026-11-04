@@ -1,0 +1,11 @@
+<li>
+  <span><strong><%= trade.name %>:</strong> <%= trade.stock %>, <%= trade.shares %> shares at $<%= trade.pricePerShare %>/share, $<%= trade.totalSpent %> total</span>
+  <button
+    class="delete-btn"
+    type="button"
+    hx-delete="/trades/<%= trade.id %>"
+    hx-target="closest li"
+    hx-swap="outerHTML"
+    hx-disabled-elt="this"
+  >Delete</button>
+</li>
