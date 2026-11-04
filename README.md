@@ -125,12 +125,13 @@ Response path:
 ```
 
 ## Design Decisions
+### Sprint 2 Design Decisions
 
-Put the data in a json so we can transfer the data through commits. This is better than MongoDB because we can transfer data throughh commits.
+Put the data in a json so we can transfer the data through commits. This is better than MongoDB because we can transfer data through commits. Also if we only had the MongoDB system for storing data it would be harder to test the POST and DELETE requests since we would have to skim the actual code to find the test formats.
 
 - Neville Pethani
 
-Created a style.css file to organize the homepage/other pages and make the ui design look nice. I ended up choosing to use a css instead of a inline in index.html because its reusable and I didnt want to have to copy and paste the html for multiple pages. Another reason I ended up choosing to use a style.css sheet was after conversing with Neville, we decided that it would look nice and neat if all of the code for formatting ws separated into a different file, making the index code easier to read. Also if we only had the MongoDB system for storing data it would be harder to test the POST and DELETE requests since we would have to skim the actual code to find the test formats.
+Created a style.css file to organize the homepage/other pages and make the ui design look nice. I ended up choosing to use a css instead of a inline in index.html because its reusable and I didnt want to have to copy and paste the html for multiple pages. Another reason I ended up choosing to use a style.css sheet was after conversing with Neville, we decided that it would look nice and neat if all of the code for formatting ws separated into a different file, making the index code easier to read.
 
 - Jayden Zoll
 
@@ -141,6 +142,9 @@ Used EJS files to display webpages instead of static HTML files. This way, we di
 Put the check for a missing trades.json in the repository so it just returns an empty list if the file isn't there yet. This is better than putting it in the service because the service shouldn't care where the data is stored.
 
 - Yash Sawhney
+
+### Sprint 3 Design Decisions
+
 
 ## Sprint 3: MongoDB Repository
 
