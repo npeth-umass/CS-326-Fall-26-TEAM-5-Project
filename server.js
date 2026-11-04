@@ -1,6 +1,7 @@
 import express from "express";
 import politicianRouter from "./routes/politician.js";
 import tradeRouter from "./routes/trade.js";
+import { connectDB } from "./db.js";
 
 const app = express();
 const PORT = process.env.port || 3000;
@@ -51,6 +52,7 @@ app.use((err, req, res, next) => {
   res.status(status).json({ error: message });
 });
 
+await connectDB();
 app.listen(PORT, () => {
   console.log(`Port is ${PORT} and link is http://localhost:${PORT}`);
 });
