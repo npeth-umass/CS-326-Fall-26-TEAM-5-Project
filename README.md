@@ -10,7 +10,7 @@
 | --------------- | --------------- |
 | Yash Sawhney    | yashsawhney06   |
 | Neville Pethani | npeth-umass     |
-| Jayden Zoll     | jzoll           |
+| Jayden Zoll     | jzoll2          |
 | Kehan Xu        | SpookyyTheGhost |
 
 ## Team Agreement!!
@@ -78,6 +78,44 @@ This will start a local server at port 3000. So just go to http://localhost:3000
 - Added Home Page
 - Added CSS styling for each web page.
 - Added Jest tests for every validation rule our service layer enforces, to use the test right npm test into the terminal
+## Features:
+- Code is split into four layers: routes, controllers, services and repositories.
+- Data is stored permanently in JSON file
+- Each page is an EJS template with a shared header for navigation.
+- Home page with links to the politicians and trades pages.
+- CSS styling for every page.
+- Forms on the Politicians and Trades pages let you add and delete entries in the browser.
+
+## Pages:
+| GET | `/` | Home page with links to politicians and trades |
+| GET | `/politicians` | List of politicians + create form |
+| GET | `/politicians/:name` | Details for one politician (In JSON currently) |
+| GET | `/trades` | List of trades for each politician |
+
+## Adding or Deleting:
+- Open `/politicians` or `/trades`.
+- There is a form that you can fill in and add/remove entries with
+- Server will notify you if there is a missing field/other errors
+
+**Create a politician**
+
+| Field | Required | Notes |
+|---|---|---|
+| `name` | Yes | Format "Last, First". Must be unique (case-insensitive). |
+| `party` | Yes | Text |
+| `state` | No | Text, e.g. `MA` |
+| `chamber` | No | Text, e.g. `Senate` |
+
+**Create a trade**
+
+| Field | Required | Notes |
+|---|---|---|
+| `name` | Yes | The politician's name |
+| `stock` | Yes | Text, e.g. `Google` |
+| `shares` | Yes | Positive whole number |
+| `pricePerShare` | Yes | Positive number |
+
+`totalSpent` is calculated by the server (`shares × pricePerShare`)
 ```
 
 ## Design Decisions
@@ -86,7 +124,7 @@ Put the data in a json so we can transfer the data through commits. This is bett
 
 - Neville Pethani
 
-Created a style.css file to organize the homepage/other pages and make the ui design look nice. I ended up choosing to use a css instead of a inline in index.html because its reusable and I didnt want to have to copy and paste the html for multiple pages. Another reason I ended up choosing to use a style.css sheet was after conversing with Neville, we decided that it would look nice and neat if all of the code for formatting ws separated into a different file, making the index code easier to read.
+Created a style.css file to organize the homepage/other pages and make the ui design look nice. I ended up choosing to use a css instead of a inline in index.html because its reusable and I didnt want to have to copy and paste the html for multiple pages. Another reason I ended up choosing to use a style.css sheet was after conversing with Neville, we decided that it would look nice and neat if all of the code for formatting ws separated into a different file, making the index code easier to read. Also if we only had the MongoDB system for storing data it would be harder to test the POST and DELETE requests since we would have to skim the actual code to find the test formats.
 
 - Jayden Zoll
 
@@ -101,3 +139,11 @@ Put the check for a missing trades.json in the repository so it just returns an 
 For the service-layer tests, I replaced the repositories with test doubles using `jest.unstable_mockModule` similar to how we were taught to do it in unit 13. One alternative was to test the services against the real repositories, but I think the mocked version is better for these tests because they are about our validation rules. With mocks the suite runs in under a second needs nothing running and leaves no data behind.
 
 - Jayden Zoll
+## Sprint 3: MongoDB Repository
+
+The trades feature now saves to MongoDB instead of data/trades.json and the repository (repositories/tradeRepository.js) uses a Mongoose schema (models/trade.js) with per record operations: getAll, findById, create, updateById, and removeById. To see it, start MongoDB, run `npm run seed` to load the starting trades, then run `npm start` and open /trades. Trades you add or delete stay changed after restarting the server.
+
+Exceptions: the routes and controller did not change while three other places did because they all assumed a trade's id was its position in the array:
+- views/trades.ejs now puts trade._id on each list item instead of the list index
+- public/form.js uses the _id from the server for new trades, and the function that renumbered ids after an add or delete was removed
+- services/tradeService.js deleteTrade no longer converts the id to a number, it just passes it to removeById
