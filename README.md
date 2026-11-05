@@ -32,6 +32,8 @@ git clone https://github.com/npeth-umass/CS-326-Fall-26-TEAM-5-Project
 cd "CS-326-Fall-26-TEAM-5-Project"
 npm install express
 npm install mongoose
+npm install --save-dev jest@30
+npm test
 dc-up mongo
 npm start
 ```
@@ -75,6 +77,19 @@ This will start a local server at port 3000. So just go to http://localhost:3000
               |                            |
               v                            v
      data/politicians.json          data/trades.json
+
+Response path:
+  repository -> service -> controller -> dtos/tradeDto.js
+      -> res.render('trades' / 'politicians' / 'details')
+      -> views/*.ejs + views/partials/header.ejs
+      -> HTML sent to Browser
+
+  Static files:
+  Browser -> public/style.css, public/index.html, public/form.js
+```
+
+
+
 
 ## New Features
 
