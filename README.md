@@ -33,13 +33,16 @@ cd "CS-326-Fall-26-TEAM-5-Project"
 npm install express
 npm install mongoose
 npm install --save-dev jest@30
-npm test
 dc-up mongo
 npm start
 ```
 Then in another terminal window run:
 ```bash
 npm run seed
+```
+If you want to run the Jest Tests run:
+```
+npm test
 ```
 This will start you out with the basic pre-made dataset for testing.
 
