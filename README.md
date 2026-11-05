@@ -32,12 +32,17 @@ git clone https://github.com/npeth-umass/CS-326-Fall-26-TEAM-5-Project
 cd "CS-326-Fall-26-TEAM-5-Project"
 npm install express
 npm install mongoose
+npm install --save-dev jest@30
 dc-up mongo
 npm start
 ```
 Then in another terminal window run:
 ```bash
 npm run seed
+```
+If you want to run the Jest Tests run:
+```
+npm test
 ```
 This will start you out with the basic pre-made dataset for testing.
 
@@ -52,9 +57,7 @@ This will start a local server at port 3000. So just go to http://localhost:3000
 5. If you leave out a required field, the page shows an error message saying what's missing instead of saving the trade.
 
 ## System Diagram
-
-```
-                         Browser
+                        Browser
                             |
               GET /politicians, , /trades...
                             |
@@ -88,9 +91,18 @@ Response path:
   Browser -> public/style.css, public/index.html, public/form.js
 ```
 
+
+
+
 ## New Features
 
 ```
+- Split the route handler into four layers: route, controller, service and repository.
+- Created Json files to permanentlys store data.
+- Added EJS files for each route and navigatation between them.
+- Added Home Page
+- Added CSS styling for each web page.
+- Added Jest tests for every validation rule our service layer enforces, to use the test right npm test into the terminal
 ## Features:
 - Code is split into four layers: routes, controllers, services and repositories.
 - Data is stored permanently in JSON file
@@ -160,6 +172,9 @@ For Sprint 3, I switched trade deletes to use MongoDB's _id instead of the trade
 
 \- Yash Sawhney
 
+For the service-layer tests, I replaced the repositories with test doubles using `jest.unstable_mockModule` similar to how we were taught to do it in unit 13. One alternative was to test the services against the real repositories, but I think the mocked version is better for these tests because they are about our validation rules. With mocks the suite runs in under a second needs nothing running and leaves no data behind.
+
+- Jayden Zoll
 ## Sprint 3: MongoDB Repository
 
 The trades feature now saves to MongoDB instead of data/trades.json and the repository (repositories/tradeRepository.js) uses a Mongoose schema (models/trade.js) with per record operations: getAll, findById, create, updateById, and removeById. To see it, start MongoDB, run `npm run seed` to load the starting trades, then run `npm start` and open /trades. Trades you add or delete stay changed after restarting the server.
