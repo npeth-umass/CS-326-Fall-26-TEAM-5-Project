@@ -2,7 +2,7 @@ import { Ok, Err } from "../result.js";
 import { getAll, findByName, create, removeByName } from "../repositories/politicianRepository.js";
 import { toPoliticianDto } from "../dtos/politicianDto.js";
 
-const REQUIRED_FIELDS = ['name', 'party', 'state', 'chamber'];
+const REQUIRED_FIELDS = ['name', 'party'];
 const OPTIONAL_FIELDS = ["state", "chamber"]; //making this optional for now for form implementation. Can expand to include this once UI is finalized.
 
 const normalizeName = (name) => name.trim().toLowerCase();
