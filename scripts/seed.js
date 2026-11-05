@@ -3,9 +3,12 @@
 import fs from "node:fs/promises";
 import mongoose from "mongoose";
 import { connectDB } from "../db.js";
-import { Trade } from "../models/trade.js";
+import { Trade } from "../repositories/tradeRepository.js";
+import { Politician } from "../repositories/politicianRepository.js";
 
 const file = new URL("../data/trades.json", import.meta.url);
+const politiciansFile = new URL("../data/politicians.json", import.meta.url);
+const politicians = JSON.parse(await fs.readFile(politiciansFile, "utf8"));
 const trades = JSON.parse(await fs.readFile(file, "utf8")).map((t) => ({
   name: t.name,
   stock: t.stock,
@@ -18,4 +21,7 @@ await connectDB();
 await Trade.deleteMany({});
 await Trade.insertMany(trades);
 console.log(`Seeded ${trades.length} trades`);
+await Politician.deleteMany({});
+await Politician.insertMany(politicians);
+console.log(`Seeded ${politicians.length} politicians`);
 await mongoose.disconnect();

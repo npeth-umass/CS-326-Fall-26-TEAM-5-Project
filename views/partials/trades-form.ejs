@@ -1,0 +1,18 @@
+<form
+  id="entry-form"
+  class="entry-form"
+  hx-post="/trades"
+  hx-target="#entries"
+  hx-swap="beforeend"
+  hx-disabled-elt="find button"
+  <% if (locals.oob) { %>hx-swap-oob="true"<% } %>
+>
+  <h2>Add a trade</h2>
+  <p id="status" class="form-error" role="alert"></p>
+  <input type="text" name="name" placeholder="Politician (Last, First)">
+  <input type="text" name="stock" placeholder="Stock">
+  <!-- Makes it so that the minimum is 1 and it can only go up by one (like you can't have 1.05 of a stock)-->
+  <input type="number" name="shares" placeholder="Shares" min="1" step="1">
+  <input type="number" name="pricePerShare" placeholder="Price per share ($)" min="0.01" step="0.01">
+  <button type="submit">Add Trade</button>
+</form>

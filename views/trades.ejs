@@ -5,32 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Trades</title>
     <link rel="stylesheet" href="/style.css">
+    <meta
+      name="htmx-config"
+      content='{
+        "timeout": 5000,
+        "responseHandling": [
+          { "code": "204", "swap": false },
+          { "code": "[23]..", "swap": true },
+          { "code": "[45]..", "swap": true, "error": true, "target": "#status", "swapOverride": "innerHTML" }
+        ]
+      }'
+    >
+    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
   </head>
-  <body>
+  <body
+    hx-on::send-error="document.querySelector('#status').textContent = 'Could not reach the server.'"
+    hx-on::timeout="document.querySelector('#status').textContent = 'The server did not answer within five seconds.'"
+  >
     <%- include('partials/header') %>
     <main>
       <h1>Trades</h1>
-
-      <!-- Handled by /form.js: sends JSON to POST /trades with fetch -->
-      <form id="entry-form" class="entry-form" data-endpoint="/trades" data-kind="trade">
-        <h2>Add a trade</h2>
-        <p class="form-error" role="alert" hidden></p>
-        <input type="text" name="name" placeholder="Politician (Last, First)">
-        <input type="text" name="stock" placeholder="Stock">
-        <input type="number" name="shares" placeholder="Shares" min="1" step="1">
-        <input type="number" name="pricePerShare" placeholder="Price per share ($)" min="0.01" step="0.01">
-        <button type="submit">Add Trade</button>
-      </form>
-
+      <%- include('partials/trades-form') %>
       <ul id="entries">
         <% trades.forEach((trade) => { %>
-          <li data-id="<%= trade._id %>">
-            <span><strong><%= trade.name %>:</strong> <%= trade.stock %>, <%= trade.shares %> shares at $<%= trade.pricePerShare %>/share, $<%= trade.totalSpent %> total</span>
-            <button class="delete-btn" type="button">Delete</button>
-          </li>
+          <%- include('partials/trade', { trade }) %>
         <% }); %>
       </ul>
     </main>
-    <script src="/form.js" defer></script>
   </body>
 </html>

@@ -1,5 +1,6 @@
 import { Ok, Err } from "../result.js";
-import { getAll, create, removeById } from "../repositories/tradeRepository.js";
+import { getAll, findById, create, removeById } from "../repositories/tradeRepository.js";
+import { toTradeDto } from "../dtos/tradeDto.js";
 
 const validateTrades = ({ name, stock, shares, pricePerShare } = {}) => {
   name = typeof name === "string" ? name.trim() : "";
@@ -29,7 +30,7 @@ const validateTrades = ({ name, stock, shares, pricePerShare } = {}) => {
 };
 
 export async function listTrades() {
-  return getAll();
+  return (await getAll()).map(toTradeDto);
 }
 
 export async function createTrade(input = {}) {
@@ -48,11 +49,12 @@ export async function createTrade(input = {}) {
     pricePerShare,
     totalSpent,
   });
-  return Ok(created);
+  return Ok(toTradeDto(created));
 }
 
 export async function deleteTrade(id) {
-  const removed = await removeById(id);
-  if (!removed) return Err({ status: 404, message: "Trade not found" });
+  const existing = await findById(id);
+  if (!existing) return Err({ status: 404, message: "Trade not found" });
+  await removeById(id);
   return Ok(null);
 }

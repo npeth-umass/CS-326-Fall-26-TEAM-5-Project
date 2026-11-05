@@ -1,9 +1,8 @@
-export function toTradeDto(trade) {
-  return {
-    name: trade.name,
-    stocks: trade.stocks,
-    shares: trade.shares,
-    pricePerShare: trade.pricePerShare,
-    totalSpent: trade.totalSpent,
-  };
-}
+export const toTradeDto = (trade) => ({
+  id: trade._id.toString(),
+  name: trade.name,
+  stock: trade.stock,
+  shares: trade.shares,
+  pricePerShare: trade.pricePerShare,
+  totalSpent: trade.totalSpent,
+});

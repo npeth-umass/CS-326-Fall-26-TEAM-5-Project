@@ -1,5 +1,17 @@
 import * as politicianService from "../services/politicianService.js";
 
+const fromHtmx = (req) => req.get('HX-Request') === 'true';
+
+// htmx swaps an error answer into the page's status line (see the
+// htmx-config meta tag in views/entries.ejs), so it gets plain text.
+const sendError = (req, res, { status, message }) => {
+  if (fromHtmx(req)) {
+    res.status(status).send(message);
+    return;
+  }
+  res.status(status).json({ error: message });
+};
+
 export async function index(req, res) {
   const politicians = await politicianService.listPoliticians();
   res.set("X-Total-Count", String(politicians.length));
@@ -16,8 +28,9 @@ export async function searchByName(req, res) {
 
 export async function create(req, res) {
   const result = await politicianService.createPolitician(req.body);
-  if (!result.ok) {
-    res.status(result.error.status).json({ error: result.error.message });
+  if (!result.ok) return sendError(req, res, result.error);
+  if (fromHtmx(req)) {
+    res.status(201).render("partials/politician-created", { politician: result.value });
     return;
   }
   res.status(201).json(result.value);
@@ -29,5 +42,5 @@ export async function destroy(req, res) {
     res.status(result.error.status).json({ error: result.error.message });
     return;
   }
-  res.status(204).send();
+  res.status(200).send();
 }
