@@ -32,18 +32,25 @@ git clone https://github.com/npeth-umass/CS-326-Fall-26-TEAM-5-Project
 cd "CS-326-Fall-26-TEAM-5-Project"
 npm install express
 npm install mongoose
-npm install --save-dev jest@30
+npm install -D tailwindcss @tailwindcss/cli
+npm run build:css ##RUN THIS WHEN YOU EDIT THE CSS/ADD TAILWIND CLASSES TO HTML OR EJS FILES!!
+npm install --save-dev jest
 dc-up mongo
 npm start
 ```
+
 Then in another terminal window run:
+
 ```bash
 npm run seed
 ```
+
 If you want to run the Jest Tests run:
+
 ```
 npm test
 ```
+
 This will start you out with the basic pre-made dataset for testing.
 
 This will start a local server at port 3000. So just go to http://localhost:3000 and you should see the server running
@@ -57,53 +64,70 @@ This will start a local server at port 3000. So just go to http://localhost:3000
 5. If you leave out a required field, the page shows an error message saying what's missing instead of saving the trade.
 
 ## System Diagram
-                        Browser
-                            |
-              GET /politicians, , /trades...
-                            |
-                            v
-                  server.js (Express app)
-                            |
-              +-------------+--------------+
-              |                            |
-              v                            v
-     routes/politician.js          routes/trade.js
-              |                            |
-              v                            v
- controllers/politicianController.js   controllers/tradeController.js
-              |                            |
-              v                            v
- services/politicianService.js     services/tradeService.js
-              |                            |
-              v                            v
- repositories/politicianRepository.js  repositories/tradeRepository.js
-              |                            |
-              v                            v
-     data/politicians.json          data/trades.json
+
+```
+                              Browser
+                                 |
+                   GET /politicians, /trades, ...
+                                 |
+                                 v
+                       server.js (Express app)
+                                 |
+                   +-------------+--------------+
+                   |                            |
+                   v                            v
+          routes/politician.js          routes/trade.js
+                   |                            |
+                   v                            v
+   controllers/politicianController.js  controllers/tradeController.js
+                   |                            |
+                   v                            v
+     services/politicianService.js     services/tradeService.js
+        |            |                          |
+        |            v                          |
+        |   dtos/politicianDto.js               |
+        v                                       v
+   repositories/politicianRepository.js  repositories/tradeRepository.js
+                   |                            |
+                   +-------------+--------------+
+                                 |
+                                 v
+                        MongoDB (database)
+        politicians collection | trades collection
+
+Tests (Jest, ESM):
+tests/politicianService.test.js -> services/politicianService.js
+    mocks: repositories/politicianRepository.js, dtos/politicianDto.js
+tests/tradeService.test.js -> services/tradeService.js
+    mocks: repositories/tradeRepository.js
+(mocks use jest.unstable_mockModule, so no real MongoDB is touched)
 
 Response path:
-  repository -> service -> controller -> dtos/tradeDto.js
-      -> res.render('trades' / 'politicians' / 'details')
-      -> views/*.ejs + views/partials/header.ejs
-      -> HTML sent to Browser
+service -> controller -> dtos/tradeDto.js (trades only)
+  -> res.render('trades' / 'politicians' / 'details')
+  -> views/*.ejs + views/partials/header.ejs
+  -> HTML sent to Browser
 
-  Static files:
-  Browser -> public/style.css, public/index.html, public/form.js
+Static files:
+Browser -> public/style.css, public/index.html,
+
+Tailwind:
+src/input.css -> public/style.css
 ```
-
-
-
 
 ## New Features
 
 ```
+
 - Split the route handler into four layers: route, controller, service and repository.
 - Created Json files to permanentlys store data.
 - Added EJS files for each route and navigatation between them.
 - Added Home Page
 - Added CSS styling for each web page.
 - Added Jest tests for every validation rule our service layer enforces, to use the test right npm test into the terminal
+
 ## Features:
+
 - Code is split into four layers: routes, controllers, services and repositories.
 - Data is stored permanently in JSON file
 - Each page is an EJS template with a shared header for navigation.
@@ -112,12 +136,14 @@ Response path:
 - Forms on the Politicians and Trades pages let you add and delete entries in the browser.
 
 ## Pages:
+
 | GET | `/` | Home page with links to politicians and trades |
 | GET | `/politicians` | List of politicians + create form |
 | GET | `/politicians/:name` | Details for one politician (In JSON currently) |
 | GET | `/trades` | List of trades for each politician |
 
 ## Adding or Deleting:
+
 - Open `/politicians` or `/trades`.
 - There is a form that you can fill in and add/remove entries with
 - Server will notify you if there is a missing field/other errors
@@ -141,9 +167,29 @@ Response path:
 | `pricePerShare` | Yes      | Positive number       |
 
 `totalSpent` is calculated by the server (`shares × pricePerShare`)
+
 ```
 
+## Update Documentations (Changes)
+
+MongoDB: The trades feature now saves to MongoDB instead of data/trades.json and the repository (repositories/tradeRepository.js) uses a Mongoose schema (models/trade.js) with per record operations: getAll, findById, create, updateById, and removeById. To see it, start MongoDB, run `npm run seed` to load the starting trades, then run `npm start` and open /trades. Trades you add or delete stay changed after restarting the server.
+
+Exceptions: the routes and controller did not change while three other places did because they all assumed a trade's id was its position in the array:
+
+- views/trades.ejs now puts trade.\_id on each list item instead of the list index
+- public/form.js uses the \_id from the server for new trades, and the function that renumbered ids after an add or delete was removed
+- services/tradeService.js deleteTrade no longer converts the id to a number, it just passes it to removeById
+
+Politicians also moved to MongoDB (models/politician.js, repositories/politicianRepository.js) where Politicians are still deleted by name, so the view and form.js didn't change, but services/politicianService.js did as it had its own create and removeByName functions that read and rewrote the whole JSON array so those moved into the repository.
+
+HTMX: When you do the form, the form goes through HTMX instead of a seperate forms.js. Interactions are editing the politician and trades forms.
+
+tests: test files are stored at `__test__` and to run them, you just run `npm test`
+
+Tailwind: Intergrated old css file into the HTML/EJS files through tailwind, added different formats to shrinking/enlarging window (textboxes are stacked when small, in a row when large to allow for a better user experience.). Additonally, fixed overflow for smaller windows and removed horizontal scroll bar.
+
 ## Design Decisions
+
 ### Sprint 2 Design Decisions
 
 Put the data in a json so we can transfer the data through commits. This is better than MongoDB because we can transfer data through commits. Also if we only had the MongoDB system for storing data it would be harder to test the POST and DELETE requests since we would have to skim the actual code to find the test formats.
@@ -168,20 +214,14 @@ Added a home button to the navbar since it isn't completely obvious to click the
 
 \- Neville Pethani
 
-For Sprint 3, I switched trade deletes to use MongoDB's _id instead of the trade's position in the list as otherwise we would've had to keep using the position by sorting the trades the same way every time and deleting the "nth" one. That would have meant fewer changes, but the position shifts whenever someone else adds or deletes a trade so a Delete button could remove the wrong trade. Using _id cost us changes to trades.ejs, form.js, and deleteTrade in the service, but each Delete button now always points at the same trade.
+For Sprint 3, I switched trade deletes to use MongoDB's \_id instead of the trade's position in the list as otherwise we would've had to keep using the position by sorting the trades the same way every time and deleting the "nth" one. That would have meant fewer changes, but the position shifts whenever someone else adds or deletes a trade so a Delete button could remove the wrong trade. Using \_id cost us changes to trades.ejs, form.js, and deleteTrade in the service, but each Delete button now always points at the same trade.
 
 \- Yash Sawhney
 
 For the service-layer tests, I replaced the repositories with test doubles using `jest.unstable_mockModule` similar to how we were taught to do it in unit 13. One alternative was to test the services against the real repositories, but I think the mocked version is better for these tests because they are about our validation rules. With mocks the suite runs in under a second needs nothing running and leaves no data behind.
 
-- Jayden Zoll
-## Sprint 3: MongoDB Repository
+\- Jayden Zoll
 
-The trades feature now saves to MongoDB instead of data/trades.json and the repository (repositories/tradeRepository.js) uses a Mongoose schema (models/trade.js) with per record operations: getAll, findById, create, updateById, and removeById. To see it, start MongoDB, run `npm run seed` to load the starting trades, then run `npm start` and open /trades. Trades you add or delete stay changed after restarting the server.
+For this sprint my design decision was restyling into tailwind. I added the tailwind css file at src/input.css and removed/overwrote the old style.css files. I integrated most of the old css code into the HTML files with tailwind minus a few I kept as components in the tailwind file because it was more efficient/readable (e.g not repeating css code for the same bodys and links etc). Additionally, I added better support for different window sizes, adding breakpoints that made the UI fit on each window size well. An alternative was continuing to use our old css file with no tailwind;however, our shipped version is better because it allowed for faster and clearer implementation since you can directly edit the html elements in their own file without using ids/classes/tags. The alternative would have costed scalablity since it would be a lot harder to keep track of so many different element tags that it would have slowed developement substantially down the line.
 
-Exceptions: the routes and controller did not change while three other places did because they all assumed a trade's id was its position in the array:
-- views/trades.ejs now puts trade._id on each list item instead of the list index
-- public/form.js uses the _id from the server for new trades, and the function that renumbered ids after an add or delete was removed
-- services/tradeService.js deleteTrade no longer converts the id to a number, it just passes it to removeById
-
-Politicians also moved to MongoDB (models/politician.js, repositories/politicianRepository.js) where Politicians are still deleted by name, so the view and form.js didn't change, but services/politicianService.js did as it had its own create and removeByName functions that read and rewrote the whole JSON array so those moved into the repository.
+\- Kehan Xu
