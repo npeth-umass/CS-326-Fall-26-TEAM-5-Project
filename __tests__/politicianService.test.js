@@ -1,31 +1,42 @@
-import { jest } from '@jest/globals';
+import { jest } from "@jest/globals";
 
-jest.unstable_mockModule('../repositories/politicianRepository.js', () => ({
+jest.unstable_mockModule("../repositories/politicianRepository.js", () => ({
   getAll: jest.fn(),
   create: jest.fn(),
   removeByName: jest.fn(),
+  findByName: jest.fn(),
 }));
 
-jest.unstable_mockModule('../dtos/politicianDto.js', () => ({
+jest.unstable_mockModule("../dtos/politicianDto.js", () => ({
   toPoliticianDto: jest.fn((politician) => politician),
 }));
 
-const { createPolitician, deletePolitician, listPoliticians } = await import(
-  '../services/politicianService.js'
-);
-const { getAll, create, removeByName } = await import('../repositories/politicianRepository.js');
-const { toPoliticianDto } = await import('../dtos/politicianDto.js');
+const { createPolitician, deletePolitician, listPoliticians } =
+  await import("../services/politicianService.js");
+const { getAll, create, removeByName, findByName } =
+  await import("../repositories/politicianRepository.js");
+const { toPoliticianDto } = await import("../dtos/politicianDto.js");
 
 const valid = {
-  name: 'Pressley, Ayanna',
-  party: 'Democratic',
-  state: 'Massachusetts',
-  chamber: 'House of Representatives',
+  name: "Pressley, Ayanna",
+  party: "Democratic",
+  state: "Massachusetts",
+  chamber: "House of Representatives",
 };
 
 const existing = [
-  { name: 'Warren, Elizabeth', party: 'Democratic', state: 'Massachusetts', chamber: 'Senate' },
-  { name: 'Markey, Edward J.', party: 'Democratic', state: 'Massachusetts', chamber: 'Senate' },
+  {
+    name: "Warren, Elizabeth",
+    party: "Democratic",
+    state: "Massachusetts",
+    chamber: "Senate",
+  },
+  {
+    name: "Markey, Edward J.",
+    party: "Democratic",
+    state: "Massachusetts",
+    chamber: "Senate",
+  },
 ];
 
 beforeEach(() => {
@@ -35,8 +46,8 @@ beforeEach(() => {
   toPoliticianDto.mockImplementation((politician) => politician);
 });
 
-describe('createPolitician', () => {
-  test('saves a valid politician and returns its DTO', async () => {
+describe("createPolitician", () => {
+  test("saves a valid politician and returns its DTO", async () => {
     const result = await createPolitician(valid);
 
     expect(result.ok).toBe(true);
@@ -45,96 +56,139 @@ describe('createPolitician', () => {
     expect(toPoliticianDto).toHaveBeenCalledWith(valid);
   });
 
-  test('trims spaces from every required field before saving', async () => {
+  test("saves a politician with only name and party", async () => {
+    const result = await createPolitician({
+      name: "Pressley, Ayanna",
+      party: "Democratic",
+    });
+
+    expect(result.ok).toBe(true);
+    expect(create).toHaveBeenCalledWith({
+      name: "Pressley, Ayanna",
+      party: "Democratic",
+    });
+  });
+
+  test("trims spaces from every field before saving", async () => {
     await createPolitician({
-      name: '  Pressley, Ayanna ',
-      party: ' Democratic ',
-      state: ' Massachusetts ',
-      chamber: ' House of Representatives ',
+      name: "  Pressley, Ayanna ",
+      party: " Democratic ",
+      state: " Massachusetts ",
+      chamber: " House of Representatives ",
     });
 
     expect(create).toHaveBeenCalledWith(valid);
   });
 
-  test('converts district to a number', async () => {
-    await createPolitician({ ...valid, district: '7' });
+  test("converts district to a number", async () => {
+    await createPolitician({ ...valid, district: "7" });
 
     expect(create).toHaveBeenCalledWith({ ...valid, district: 7 });
   });
 
-  test('accepts district 0', async () => {
-    const result = await createPolitician({ ...valid, district: '0' });
+  test("accepts district 0", async () => {
+    const result = await createPolitician({ ...valid, district: "0" });
 
     expect(result.ok).toBe(true);
     expect(create).toHaveBeenCalledWith({ ...valid, district: 0 });
   });
 
-  test('leaves district out when it is blank', async () => {
-    await createPolitician({ ...valid, district: '' });
+  test("leaves district out when it is blank", async () => {
+    await createPolitician({ ...valid, district: "" });
 
     expect(create).toHaveBeenCalledWith(valid);
   });
 
-  test('keeps optional bioguideId and imageUrl, trimmed', async () => {
-    await createPolitician({ ...valid, bioguideId: ' P000617 ', imageUrl: ' https://x.test/a.jpg ' });
+  test("keeps optional bioguideId and imageUrl, trimmed", async () => {
+    await createPolitician({
+      ...valid,
+      bioguideId: " P000617 ",
+      imageUrl: " https://x.test/a.jpg ",
+    });
 
     expect(create).toHaveBeenCalledWith({
       ...valid,
-      bioguideId: 'P000617',
-      imageUrl: 'https://x.test/a.jpg',
+      bioguideId: "P000617",
+      imageUrl: "https://x.test/a.jpg",
     });
   });
 
-  test('drops fields the service does not know about', async () => {
+  test("drops fields the service does not know about", async () => {
     await createPolitician({ ...valid, isAdmin: true });
 
     expect(create).toHaveBeenCalledWith(valid);
   });
 
-  const required = ['name', 'party', 'state', 'chamber'];
+  const required = ["name", "party"];
   const badValues = [
-    ['missing', undefined],
-    ['empty', ''],
-    ['only spaces', '   '],
-    ['not a string', 42],
+    ["missing", undefined],
+    ["empty", ""],
+    ["only spaces", "   "],
+    ["not a string", 42],
   ];
   const requiredCases = required.flatMap((field) =>
-    badValues.map(([how, value]) => [field, how, value])
+    badValues.map(([how, value]) => [field, how, value]),
   );
 
-  test.each(requiredCases)('rejects with 400 when %s is %s', async (field, _how, value) => {
-    const result = await createPolitician({ ...valid, [field]: value });
+  test.each(requiredCases)(
+    "rejects with 400 when %s is %s",
+    async (field, _how, value) => {
+      const result = await createPolitician({ ...valid, [field]: value });
 
-    expect(result.ok).toBe(false);
-    expect(result.error).toEqual({ status: 400, message: `${field} is required` });
-    expect(create).not.toHaveBeenCalled();
-  });
+      expect(result.ok).toBe(false);
+      expect(result.error).toEqual({
+        status: 400,
+        message: `${field} is required`,
+      });
+      expect(create).not.toHaveBeenCalled();
+    },
+  );
 
-  test('rejects with 400 when called with no input at all', async () => {
+  test.each([
+    ["state", undefined],
+    ["state", "   "],
+    ["chamber", ""],
+    ["chamber", 42],
+  ])(
+    "saves without %s when it is blank or not a string (%p)",
+    async (field, value) => {
+      const { [field]: _omitted, ...rest } = valid;
+
+      const result = await createPolitician({ ...valid, [field]: value });
+
+      expect(result.ok).toBe(true);
+      expect(create).toHaveBeenCalledWith(rest);
+    },
+  );
+
+  test("rejects with 400 when called with no input at all", async () => {
     const result = await createPolitician();
 
     expect(result.ok).toBe(false);
-    expect(result.error).toEqual({ status: 400, message: 'name is required' });
+    expect(result.error).toEqual({ status: 400, message: "name is required" });
     expect(create).not.toHaveBeenCalled();
   });
 
   test.each([
-    ['negative', '-1'],
-    ['a decimal', '2.5'],
-    ['not a number', 'seven'],
-  ])('rejects with 400 when district is %s', async (_how, district) => {
+    ["negative", "-1"],
+    ["a decimal", "2.5"],
+    ["not a number", "seven"],
+  ])("rejects with 400 when district is %s", async (_how, district) => {
     const result = await createPolitician({ ...valid, district });
 
     expect(result.ok).toBe(false);
     expect(result.error).toEqual({
       status: 400,
-      message: 'district must be a non-negative whole number',
+      message: "district must be a non-negative whole number",
     });
     expect(create).not.toHaveBeenCalled();
   });
 
-  test('rejects with 409 when a politician with the same name already exists', async () => {
-    const result = await createPolitician({ ...valid, name: 'Warren, Elizabeth' });
+  test("rejects with 409 when a politician with the same name already exists", async () => {
+    const result = await createPolitician({
+      ...valid,
+      name: "Warren, Elizabeth",
+    });
 
     expect(result.ok).toBe(false);
     expect(result.error).toEqual({
@@ -144,8 +198,11 @@ describe('createPolitician', () => {
     expect(create).not.toHaveBeenCalled();
   });
 
-  test('treats names that differ only in capitals or spaces as duplicates', async () => {
-    const result = await createPolitician({ ...valid, name: '  warren, ELIZABETH ' });
+  test("treats names that differ only in capitals or spaces as duplicates", async () => {
+    const result = await createPolitician({
+      ...valid,
+      name: "  warren, ELIZABETH ",
+    });
 
     expect(result.ok).toBe(false);
     expect(result.error.status).toBe(409);
@@ -153,61 +210,73 @@ describe('createPolitician', () => {
   });
 });
 
-describe('deletePolitician', () => {
-  test('removes a politician that exists', async () => {
-    removeByName.mockResolvedValueOnce(true);
+describe("deletePolitician", () => {
+  test("removes a politician that exists", async () => {
+    findByName.mockResolvedValueOnce(existing[0]);
 
-    const result = await deletePolitician('Warren, Elizabeth');
+    const result = await deletePolitician("Warren, Elizabeth");
 
     expect(result.ok).toBe(true);
-    expect(removeByName).toHaveBeenCalledWith('Warren, Elizabeth');
+    expect(removeByName).toHaveBeenCalledWith("Warren, Elizabeth");
   });
 
-  test('trims the name before removing', async () => {
-    removeByName.mockResolvedValueOnce(true);
+  test("trims the name before looking up and removing", async () => {
+    findByName.mockResolvedValueOnce(existing[0]);
 
-    await deletePolitician('  Warren, Elizabeth  ');
+    await deletePolitician("  Warren, Elizabeth  ");
 
-    expect(removeByName).toHaveBeenCalledWith('Warren, Elizabeth');
+    expect(findByName).toHaveBeenCalledWith("Warren, Elizabeth");
+    expect(removeByName).toHaveBeenCalledWith("Warren, Elizabeth");
   });
 
-  test('returns 404 when the politician does not exist', async () => {
-    removeByName.mockResolvedValueOnce(false);
+  test("returns 404 and removes nothing when the politician does not exist", async () => {
+    findByName.mockResolvedValueOnce(null);
 
-    const result = await deletePolitician('Nobody, Someone');
+    const result = await deletePolitician("Nobody, Someone");
 
     expect(result.ok).toBe(false);
-    expect(result.error).toEqual({ status: 404, message: 'Politician not found' });
+    expect(result.error).toEqual({
+      status: 404,
+      message: "Politician not found",
+    });
+    expect(removeByName).not.toHaveBeenCalled();
   });
 
   test.each([
-    ['missing', undefined],
-    ['empty', ''],
-    ['only spaces', '   '],
-  ])('returns 400 without touching the repository when the name is %s', async (_how, name) => {
-    const result = await deletePolitician(name);
+    ["missing", undefined],
+    ["empty", ""],
+    ["only spaces", "   "],
+  ])(
+    "returns 400 without touching the repository when the name is %s",
+    async (_how, name) => {
+      const result = await deletePolitician(name);
 
-    expect(result.ok).toBe(false);
-    expect(result.error).toEqual({ status: 400, message: 'name is required' });
-    expect(removeByName).not.toHaveBeenCalled();
-  });
+      expect(result.ok).toBe(false);
+      expect(result.error).toEqual({
+        status: 400,
+        message: "name is required",
+      });
+      expect(findByName).not.toHaveBeenCalled();
+      expect(removeByName).not.toHaveBeenCalled();
+    },
+  );
 });
 
-describe('listPoliticians', () => {
-  test('returns everyone when no search name is given', async () => {
+describe("listPoliticians", () => {
+  test("returns everyone when no search name is given", async () => {
     const result = await listPoliticians();
 
     expect(result).toEqual(existing);
   });
 
-  test('matches part of a name, ignoring capitals and spaces', async () => {
-    const result = await listPoliticians('  WARREN ');
+  test("matches part of a name, ignoring capitals and spaces", async () => {
+    const result = await listPoliticians("  WARREN ");
 
     expect(result).toEqual([existing[0]]);
   });
 
-  test('returns an empty list when nobody matches', async () => {
-    const result = await listPoliticians('Nobody');
+  test("returns an empty list when nobody matches", async () => {
+    const result = await listPoliticians("Nobody");
 
     expect(result).toEqual([]);
   });

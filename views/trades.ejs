@@ -26,7 +26,7 @@
     <main>
       <h1>Trades</h1>
       <%- include('partials/trades-form') %>
-      <ul id="entries">
+      <ul class="mt-4 flex flex-col gap-2" id="entries">
         <% trades.forEach((trade) => { %>
           <%- include('partials/trade', { trade }) %>
         <% }); %>

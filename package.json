@@ -6,7 +6,8 @@
   "scripts": {
     "start": "node server.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "seed": "node scripts/seed.js"
+    "seed": "node scripts/seed.js",
+    "build:css": "tailwindcss -i ./src/input.css -o ./public/style.css"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,8 @@
     "mongoose": "^9.11.4"
   },
   "devDependencies": {
-    "jest": "^30.5.2"
+    "@tailwindcss/cli": "^4.3.4",
+    "jest": "^30.5.2",
+    "tailwindcss": "^4.3.4"
   }
 }
