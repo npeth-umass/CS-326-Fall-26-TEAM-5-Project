@@ -66,7 +66,7 @@ This will start a local server at port 3000. So just go to http://localhost:3000
 ## System Diagram
 
 ```
-                              Browser
+                               Browser
                                  |
                    GET /politicians, /trades, ...
                                  |
@@ -83,36 +83,43 @@ This will start a local server at port 3000. So just go to http://localhost:3000
                    |                            |
                    v                            v
      services/politicianService.js     services/tradeService.js
-        |            |                          |
-        |            v                          |
-        |   dtos/politicianDto.js               |
-        v                                       v
+        |            |                    |            |
+        |            v                    |            v
+        |   dtos/politicianDto.js         |    dtos/tradeDto.js
+        v                                 v
    repositories/politicianRepository.js  repositories/tradeRepository.js
                    |                            |
                    +-------------+--------------+
+                                 |
+                                 v
+                   db.js (mongoose.connect)
                                  |
                                  v
                         MongoDB (database)
         politicians collection | trades collection
 
 Tests (Jest, ESM):
-tests/politicianService.test.js -> services/politicianService.js
+__tests__/politicianService.test.js -> services/politicianService.js
     mocks: repositories/politicianRepository.js, dtos/politicianDto.js
-tests/tradeService.test.js -> services/tradeService.js
+__tests__/tradeService.test.js -> services/tradeService.js
     mocks: repositories/tradeRepository.js
 (mocks use jest.unstable_mockModule, so no real MongoDB is touched)
 
 Response path:
-service -> controller -> dtos/tradeDto.js (trades only)
-  -> res.render('trades' / 'politicians' / 'details')
-  -> views/*.ejs + views/partials/header.ejs
+service -> controller
+  -> res.render('trades' / 'politicians' / 'details'), or a partial
+     from views/partials/ for HTMX requests
+  -> views/*.ejs + views/partials/*.ejs
   -> HTML sent to Browser
 
 Static files:
-Browser -> public/style.css, public/index.html,
+Browser -> public/style.css, public/index.html
 
 Tailwind:
 src/input.css -> public/style.css
+
+Seed:
+scripts/seed.js -> db.js -> MongoDB (loads data/trades.json and data/politicians.json)
 ```
 
 ## New Features
