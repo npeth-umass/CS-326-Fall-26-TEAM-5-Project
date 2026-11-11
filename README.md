@@ -217,7 +217,7 @@ Put the check for a missing trades.json in the repository so it just returns an 
 
 ### Sprint 3 Design Decisions
 
-Added a home button to the navbar since it isn't completely obvious to click the name on the top left to go back to the home page. Also added htmx to keep the javascript more clean for the form. Instead of having to go through lines of javascript that may be a bit unclear, the htmx allows us to see directly what is happening in the ejs files directly making it not only easier to read but also easier to debug.
+Added a home button to the navbar since it isn't completely obvious to click the name on the top left to go back to the home page. Also added htmx to keep the javascript more clean for the form by removing the need to skim through multiple different files and looking closely at id names to tell what each element on the page actually does. Instead of having to go through lines of javascript and having to read two separate files and match the ids of each element, the htmx allows us to see directly what is happening in the ejs files, directly making it easier to read since everything is in the same file. Not having this would mean debugging would require more lines of code, debugging between two files instead of one and introduce more bugs with it being possible to specify the wrong elementId to execute an unintended function.
 
 \- Neville Pethani
 
