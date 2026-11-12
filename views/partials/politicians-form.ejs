@@ -1,15 +1,15 @@
 <form
   id="entry-form"
-  class="entry-form flex flex-col gap-2 sm:flex-row sm:items-center"
+  class="entry-form flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center"
   hx-post="/politicians"
   hx-target="#entries"
   hx-swap="beforeend"
   hx-disabled-elt="find button"
   <% if (locals.oob) { %>hx-swap-oob="true"<% } %>
 >
-  <h2 class="whitespace-nowrap">Add a politician</h2>
-  <p id="status" class="form-error" role="alert"></p>
-  <input class="rounded-md border border-slate-300 px-3 py-2" type="text" name="name" placeholder="Name (Last, First)">
-  <input class="rounded-md border border-slate-300 px-3 py-2" type="text" name="party" placeholder="Party">
-  <button class="cursor-pointer whitespace-nowrap  rounded-md bg-[#0f2a4a] px-[1.1rem] py-2 font-semibold text-white" type="submit">Add Politician</button>
+  <h2 class="whitespace-nowrap sm:basis-full">Add a politician</h2>
+  <p id="status" class="form-error empty:hidden sm:basis-full" role="alert"></p>
+  <input class="min-w-0 rounded-md border border-slate-300 px-3 py-2 sm:flex-1 sm:basis-44" type="text" name="name" placeholder="Name (Last, First)">
+  <input class="min-w-0 rounded-md border border-slate-300 px-3 py-2 sm:flex-1 sm:basis-44" type="text" name="party" placeholder="Party">
+  <button class="shrink-0 cursor-pointer whitespace-nowrap rounded-md bg-[#0f2a4a] px-[1.1rem] py-2 font-semibold text-white" type="submit">Add Politician</button>
 </form>
