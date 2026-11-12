@@ -175,6 +175,9 @@
   }
 }
 @layer utilities {
+  .fixed {
+    position: fixed;
+  }
   .static {
     position: static;
   }
@@ -208,6 +211,12 @@
   .max-w-\[720px\] {
     max-width: 720px;
   }
+  .min-w-0 {
+    min-width: 0px;
+  }
+  .shrink-0 {
+    flex-shrink: 0;
+  }
   .cursor-pointer {
     cursor: pointer;
   }
@@ -238,14 +247,6 @@
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
-  }
-  .border-0 {
-    border-style: var(--tw-border-style);
-    border-width: 0px;
-  }
-  .border-2 {
-    border-style: var(--tw-border-style);
-    border-width: 2px;
   }
   .border-red-300 {
     border-color: var(--color-red-300);
@@ -337,6 +338,9 @@
     --tw-duration: 200ms;
     transition-duration: 200ms;
   }
+  .empty\:hidden:empty {
+    display: none;
+  }
   @media (hover: hover) {
     .hover\:border-red-600:hover {
       border-color: var(--color-red-600);
@@ -354,6 +358,10 @@
     --tw-scale-z: 95%;
     scale: var(--tw-scale-x) var(--tw-scale-y);
   }
+  .active\:border-0:active {
+    border-style: var(--tw-border-style);
+    border-width: 0px;
+  }
   .active\:bg-red-800:active {
     background-color: var(--color-red-800);
   }
@@ -361,8 +369,20 @@
     color: var(--color-white);
   }
   @media (width >= 40rem) {
+    .sm\:flex-1 {
+      flex: 1;
+    }
+    .sm\:basis-44 {
+      flex-basis: calc(var(--spacing) * 44);
+    }
+    .sm\:basis-full {
+      flex-basis: 100%;
+    }
     .sm\:flex-row {
       flex-direction: row;
+    }
+    .sm\:flex-wrap {
+      flex-wrap: wrap;
     }
     .sm\:items-center {
       align-items: center;
@@ -389,7 +409,6 @@
     margin: 0;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     background: #f5f7fa;
-    overflow-x: hidden;
     color: #1f2937;
     line-height: 1.6;
   }
