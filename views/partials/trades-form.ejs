@@ -7,12 +7,16 @@
   hx-disabled-elt="find button"
   <% if (locals.oob) { %>hx-swap-oob="true"<% } %>
 >
-  <h2 class="whitespace-nowrap sm:basis-full">Add a trade</h2>
-  <p id="status" class="form-error" role="alert"></p>
-  <input class="rounded-md border border-slate-300 px-3 py-2" type="text" name="name" placeholder="Politician (Last, First)">
-  <input class="rounded-md border border-slate-300 px-3 py-2" type="text" name="stock" placeholder="Stock">
+<h2 class="whitespace-nowrap sm:basis-full">Add a trade</h2>
+  <p id="status" class="form-error empty:hidden sm:basis-full" role="alert"></p>
+  <label class="sr-only" for="trade-name">Politician</label>
+  <input id="trade-name" class="min-w-0 rounded-md border border-slate-500 px-3 py-2 placeholder:text-slate-500 sm:flex-1 sm:basis-44" type="text" name="name" placeholder="Politician (Last, First)">
+  <label class="sr-only" for="trade-stock">Stock</label>
+  <input id="trade-stock" class="min-w-0 rounded-md border border-slate-500 px-3 py-2 placeholder:text-slate-500 sm:flex-1 sm:basis-44" type="text" name="stock" placeholder="Stock">
   <!-- Makes it so that the minimum is 1 and it can only go up by one (like you can't have 1.05 of a stock)-->
-  <input class="rounded-md border border-slate-300 px-3 py-2" type="number" name="shares" placeholder="Shares" min="1" step="1">
-  <input class="rounded-md border border-slate-300 px-3 py-2" type="number" name="pricePerShare" placeholder="Price per share ($)" min="0.01" step="0.01">
-  <button class="cursor-pointer whitespace-nowrap rounded-md bg-[#0f2a4a] px-[1.1rem] py-2 font-semibold text-white" type="submit">Add Trade</button>
+  <label class="sr-only" for="trade-shares">Shares</label>
+  <input id="trade-shares" class="min-w-0 rounded-md border border-slate-500 px-3 py-2 placeholder:text-slate-500 sm:flex-1 sm:basis-44" type="number" name="shares" placeholder="Shares" min="1" step="1">
+  <label class="sr-only" for="trade-price">Price per share ($)</label>
+  <input id="trade-price" class="min-w-0 rounded-md border border-slate-500 px-3 py-2 placeholder:text-slate-500 sm:flex-1 sm:basis-44" type="number" name="pricePerShare" placeholder="Price per share ($)" min="0.01" step="0.01">
+  <button class="shrink-0 cursor-pointer whitespace-nowrap rounded-md bg-[#0f2a4a] px-[1.1rem] py-2 font-semibold text-white" type="submit">Add Trade</button>
 </form>

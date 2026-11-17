@@ -195,6 +195,21 @@ tests: test files are stored at `__test__` and to run them, you just run `npm te
 
 Tailwind: Intergrated old css file into the HTML/EJS files through tailwind, added different formats to shrinking/enlarging window (textboxes are stacked when small, in a row when large to allow for a better user experience.). Additonally, fixed overflow for smaller windows and removed horizontal scroll bar.
 
+## Sprint 4: Accessibility Audit
+
+I went through /trades and /politicians using only the keyboard (safari has some limitations) and checked the colors with a contrast checker. Here's what I found and fixed:
+
+- The form boxes had no labels, just placeholder text. I added a hidden label to each one. To check, inspect a box and it has a label.
+- After deleting a row, the focus outline disappeared. Now it moves to the next Delete button. To check, Tab to Delete and press Enter.
+- After adding a trade or politician, the focus disappeared. Now it goes back to the first box. To check, fill out the form and press Enter.
+- After a failed submit, the focus disappeared. Now it goes to the empty box. To check, leave Stock blank and submit.
+- Every Delete button just said "Delete." Now a screen reader hears which row it's for, like "Delete trade by Warren, Elizabeth."
+- The focus outline was hard to see. I added a thicker blue outline (white in the nav bar). To check, Tab through the page.
+- The placeholder text was too light (3.37:1). I made it darker (4.77:1).
+
+Contrast (needs 4.5:1 to pass): body text 13.68:1, Add buttons 14.48:1, Delete button 6.54:1, Delete hover 4.89:1, nav link hover 6.70:1. All pass.
+
+
 ## Design Decisions
 
 ### Sprint 2 Design Decisions
