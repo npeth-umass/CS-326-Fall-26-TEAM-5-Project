@@ -209,6 +209,7 @@ I went through /trades and /politicians using only the keyboard (safari has some
 
 Contrast (needs 4.5:1 to pass): body text 13.68:1, Add buttons 14.48:1, Delete button 6.54:1, Delete hover 4.89:1, nav link hover 6.70:1. All pass.
 
+\- Yash Sawhney
 
 ## Design Decisions
 
