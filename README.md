@@ -213,6 +213,12 @@ Contrast (needs 4.5:1 to pass): body text 13.68:1, Add buttons 14.48:1, Delete b
 
 ## Design Decisions
 
+### Sprint 4 Design Decisions
+
+I put all the focus fixes in one file, public/focus.js, instead of adding hx-on code to every form and Delete button. Putting it on each button would keep the code next to the button, but we'd have to copy it into four files and could forget it on new buttons. With one file, both pages get the same fix and there's only one place to change it.
+
+\- Sprint 4, Yash Sawhney
+
 ### Sprint 2 Design Decisions
 
 Put the data in a json so we can transfer the data through commits. This is better than MongoDB because we can transfer data through commits. Also if we only had the MongoDB system for storing data it would be harder to test the POST and DELETE requests since we would have to skim the actual code to find the test formats.
