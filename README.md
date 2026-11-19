@@ -32,9 +32,12 @@ git clone https://github.com/npeth-umass/CS-326-Fall-26-TEAM-5-Project
 cd "CS-326-Fall-26-TEAM-5-Project"
 npm install express
 npm install mongoose
+npm install bcrypt
+npm install cookie-parser
 npm install -D tailwindcss @tailwindcss/cli
 npm run build:css ##RUN THIS WHEN YOU EDIT THE CSS/ADD TAILWIND CLASSES TO HTML OR EJS FILES!!
 npm install --save-dev jest
+cp .env.example .env
 dc-up mongo
 npm start
 ```
@@ -52,6 +55,13 @@ npm test
 ```
 
 This will start you out with the basic pre-made dataset for testing.
+
+If you want to change a user's role then you use:
+
+```bash
+npm run seed:admin -- you@example.com          # promote to admin
+npm run seed:admin -- you@example.com member   # demote
+```
 
 This will start a local server at port 3000. So just go to http://localhost:3000 and you should see the server running
 

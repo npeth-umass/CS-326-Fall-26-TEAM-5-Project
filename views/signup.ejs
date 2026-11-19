@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <%- include('partials/header') %>
+    <main>
+      <h1 class="mb-4 text-[2rem] font-bold text-[#0f2a4a]">Sign up</h1>
+      <form method="POST" action="/signup" class="mx-auto flex max-w-sm flex-col gap-3 text-left">
+        <% if (error) { %>
+          <p id="form-error" role="alert" class="text-red-700"><%= error %></p>
+        <% } %>
+        <label for="signup-email" class="flex flex-col gap-1">Email
+          <input type="email" id="signup-email" name="email" value="<%= email %>" autocomplete="email" required class="rounded-md border border-slate-300 px-3 py-2" />
+        </label>
+        <label for="signup-password" class="flex flex-col gap-1">Password
+          <input type="password" id="signup-password" name="password" autocomplete="new-password" minlength="8" maxlength="72" required class="rounded-md border border-slate-300 px-3 py-2" />
+        </label>
+        <button type="submit" id="signup-submit" class="cursor-pointer rounded-md bg-[#0f2a4a] px-4 py-2 font-semibold text-white">Sign up</button>
+      </form>
+      <p class="mt-4">Already have an account? <a href="/login" class="text-blue-700 underline">Log in</a>.</p>
+    </main>
+  </body>
+</html>

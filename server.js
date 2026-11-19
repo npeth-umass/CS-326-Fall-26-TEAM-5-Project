@@ -1,10 +1,14 @@
 import express from "express";
+import cookieParser from "cookie-parser";
 import politicianRouter from "./routes/politician.js";
 import tradeRouter from "./routes/trade.js";
+import authRouter from './routes/auth.js';
+import { attachUser } from './middleware/attachUser.js';
 import { connectDB } from "./db.js";
 
 const app = express();
-const PORT = process.env.port || 3000;
+const PORT = process.env.PORT || 3000;
+const SESSION_SECRET = process.env.SESSION_SECRET || 'changeSecretInProd';
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -12,6 +16,12 @@ app.set("views", "views");
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.use(cookieParser(SESSION_SECRET));
+app.use(attachUser);
+
+app.use(authRouter);
+
 app.use("/politicians", politicianRouter);
 app.use("/trades", tradeRouter);
 
