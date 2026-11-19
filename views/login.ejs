@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= title %></title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <%- include('partials/header') %>
+    <main>
+      <% if (user) { %>
+        <h1 class="mb-4 text-[2rem] font-bold text-[#0f2a4a]">Already logged in</h1>
+        <p class="mb-4">You're already logged in. Log out?</p>
+        <form method="POST" action="/logout" class="mx-auto max-w-sm">
+          <button type="submit" id="logout-submit" class="cursor-pointer rounded-md bg-[#0f2a4a] px-4 py-2 font-semibold text-white">Log out</button>
+        </form>
+      <% } else { %>
+        <h1 class="mb-4 text-[2rem] font-bold text-[#0f2a4a]">Log in</h1>
+        <form method="POST" action="/login" class="mx-auto flex max-w-sm flex-col gap-3 text-left">
+          <% if (error) { %>
+            <p id="form-error" role="alert" class="text-red-700"><%= error %></p>
+          <% } %>
+          <label for="login-email" class="flex flex-col gap-1">Email
+            <input type="email" id="login-email" name="email" value="<%= email %>" autocomplete="email" required class="rounded-md border border-slate-500 px-3 py-2" />
+          </label>
+          <label for="login-password" class="flex flex-col gap-1">Password
+            <input type="password" id="login-password" name="password" autocomplete="current-password" required class="rounded-md border border-slate-500 px-3 py-2" />
+          </label>
+          <button type="submit" id="login-submit" class="cursor-pointer rounded-md bg-[#0f2a4a] px-4 py-2 font-semibold text-white">Log in</button>
+        </form>
+        <p class="mt-4">New here? <a href="/signup" class="text-blue-700 underline">Sign up</a>.</p>
+      <% } %>
+    </main>
+  </body>
+</html>

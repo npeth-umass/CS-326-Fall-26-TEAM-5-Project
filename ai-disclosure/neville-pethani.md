@@ -8,3 +8,6 @@ Showed AI my politicianService.js and asked if it looked good given a routes/con
 
 ## Sprint 3
 No AI used.
+
+## Sprint 4
+AI used for the seed script to assign admin and member roles.
