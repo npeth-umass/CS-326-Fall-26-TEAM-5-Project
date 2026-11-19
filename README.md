@@ -216,6 +216,7 @@ I went through /trades and /politicians using only the keyboard (safari has some
 - Every Delete button just said "Delete." Now a screen reader hears which row it's for, like "Delete trade by Warren, Elizabeth."
 - The focus outline was hard to see. I added a thicker blue outline (white in the nav bar). To check, Tab through the page.
 - The placeholder text was too light (3.37:1). I made it darker (4.77:1).
+- The new login and signup pages already had real labels, but the input borders were too light. I changed them to the darker border like the other forms.
 
 Contrast (needs 4.5:1 to pass): body text 13.68:1, Add buttons 14.48:1, Delete button 6.54:1, Delete hover 4.89:1, nav link hover 6.70:1. All pass.
 
