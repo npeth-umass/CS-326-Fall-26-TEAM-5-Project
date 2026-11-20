@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
-    <title><%= "Politicians" %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Politicians</title>
     <link rel="stylesheet" href="/style.css">
     <meta
       name="htmx-config"
@@ -16,6 +17,7 @@
       }'
     >
     <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+       <script src="/focus.js" defer></script>
   </head>
   <body
     hx-on::send-error="document.querySelector('#status').textContent = 'Could not reach the server.'"

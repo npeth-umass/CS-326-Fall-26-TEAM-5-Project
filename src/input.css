@@ -44,6 +44,16 @@
       color 0.2s;
   }
 
+    /* Visible focus ring for keyboard users (blue on the light page, white in the dark nav) */
+  :focus-visible {
+    outline: 3px solid #1d4ed8;
+    outline-offset: 2px;
+  }
+
+  .link:focus-visible {
+    outline-color: #ffffff;
+  }
+
   .link:hover {
     background: #1d4ed8;
     color: #fff;

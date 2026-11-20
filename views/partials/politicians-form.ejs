@@ -9,7 +9,9 @@
 >
   <h2 class="whitespace-nowrap sm:basis-full">Add a politician</h2>
   <p id="status" class="form-error empty:hidden sm:basis-full" role="alert"></p>
-  <input class="min-w-0 rounded-md border border-slate-300 px-3 py-2 sm:flex-1 sm:basis-44" type="text" name="name" placeholder="Name (Last, First)">
-  <input class="min-w-0 rounded-md border border-slate-300 px-3 py-2 sm:flex-1 sm:basis-44" type="text" name="party" placeholder="Party">
+  <label class="sr-only" for="politician-name">Name</label>
+  <input id="politician-name" class="min-w-0 rounded-md border border-slate-500 px-3 py-2 placeholder:text-slate-500 sm:flex-1 sm:basis-44" type="text" name="name" placeholder="Name (Last, First)">
+  <label class="sr-only" for="politician-party">Party</label>
+  <input id="politician-party" class="min-w-0 rounded-md border border-slate-500 px-3 py-2 placeholder:text-slate-500 sm:flex-1 sm:basis-44" type="text" name="party" placeholder="Party">
   <button class="shrink-0 cursor-pointer whitespace-nowrap rounded-md bg-[#0f2a4a] px-[1.1rem] py-2 font-semibold text-white" type="submit">Add Politician</button>
 </form>
