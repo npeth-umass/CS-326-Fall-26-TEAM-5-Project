@@ -83,6 +83,11 @@ This will start a local server at port 3000. So just go to http://localhost:3000
                                  v
                        server.js (Express app)
                                  |
+                                 v
+                            cookieParser
+                                 |
+                                 v
+                        middleware/attatchUser.js
                    +-------------+--------------+
                    |                            |
                    v                            v
