@@ -9,6 +9,11 @@ const politicianSchema = new mongoose.Schema(
     district: { type: Number },
     bioguideId: { type: String },
     imageUrl: { type: String },
+    ownerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
   },
   { timestamps: true },
 );

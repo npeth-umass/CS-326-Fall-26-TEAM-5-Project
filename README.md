@@ -229,12 +229,6 @@ Contrast (needs 4.5:1 to pass): body text 13.68:1, Add buttons 14.48:1, Delete b
 
 ## Design Decisions
 
-### Sprint 4 Design Decisions
-
-I put all the focus fixes in one file, public/focus.js, instead of adding hx-on code to every form and Delete button. Putting it on each button would keep the code next to the button, but we'd have to copy it into four files and could forget it on new buttons. With one file, both pages get the same fix and there's only one place to change it.
-
-\- Sprint 4, Yash Sawhney
-
 ### Sprint 2 Design Decisions
 
 Put the data in a json so we can transfer the data through commits. This is better than MongoDB because we can transfer data through commits. Also if we only had the MongoDB system for storing data it would be harder to test the POST and DELETE requests since we would have to skim the actual code to find the test formats.
@@ -270,3 +264,13 @@ For the service-layer tests, I replaced the repositories with test doubles using
 For this sprint my design decision was restyling into tailwind. I added the tailwind css file at src/input.css and removed/overwrote the old style.css files. I integrated most of the old css code into the HTML files with tailwind minus a few I kept as components in the tailwind file because it was more efficient/readable (e.g not repeating css code for the same bodys and links etc). Additionally, I added better support for different window sizes, adding breakpoints that made the UI fit on each window size well. An alternative was continuing to use our old css file with no tailwind;however, our shipped version is better because it allowed easier and cleaner implementation of breakpoints for our politician website, the breakpoint presents allows us to quickly make the website more usable for users on devices with differing resolutions.The alternative would have costed scalablity since it would be a lot harder to keep track of so many different element tags that it would have slowed developement substantially down the line.
 
 \- Kehan Xu
+
+### Sprint 4 Design Decisions
+
+I put all the focus fixes in one file, public/focus.js, instead of adding hx-on code to every form and Delete button. Putting it on each button would keep the code next to the button, but we'd have to copy it into four files and could forget it on new buttons. With one file, both pages get the same fix and there's only one place to change it.
+
+\- Sprint 4, Yash Sawhney
+
+I put the ownership and role check in the service layer instead of in route middleware. I kept requiredLogin on the routes but ownership needs the record so i kept the check in the service. The alternative method was a route-level requireOwner middleware but I chose the service option because the rule then protects every caller, even one that forgets the middleware, and I can unit test it with a mocked repository and no database. The middleware approach would have cost an extra database lookup, tied the rule to the HTTP layer, and left a security hole on any route where I forgot to attach it.
+
+\-Kehan Xu
