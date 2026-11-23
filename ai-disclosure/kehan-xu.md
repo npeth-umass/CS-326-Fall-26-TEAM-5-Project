@@ -11,3 +11,7 @@ General questions such as "what a system diagram should look like? Or how to wri
 ## Sprint 3
 
 General questions about tailwind syntax equivalent to googling documentation/stackoverflow to figure out how to make certain elements look the way I want. + asked assistance to updating readme file to maintain clarity
+
+## Sprint 4
+
+Used ai for general questions as well as light debugging. Additionally, asked for suggestions on how to write out my section in readme

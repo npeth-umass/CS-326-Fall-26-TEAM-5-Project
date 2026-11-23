@@ -1,6 +1,6 @@
 import * as politicianService from "../services/politicianService.js";
 
-const fromHtmx = (req) => req.get('HX-Request') === 'true';
+const fromHtmx = (req) => req.get("HX-Request") === "true";
 
 // htmx swaps an error answer into the page's status line (see the
 // htmx-config meta tag in views/entries.ejs), so it gets plain text.
@@ -27,20 +27,22 @@ export async function searchByName(req, res) {
 }
 
 export async function create(req, res) {
-  const result = await politicianService.createPolitician(req.body);
+  const result = await politicianService.createPolitician(req.body, req.user);
   if (!result.ok) return sendError(req, res, result.error);
   if (fromHtmx(req)) {
-    res.status(201).render("partials/politician-created", { politician: result.value });
+    res
+      .status(201)
+      .render("partials/politician-created", { politician: result.value });
     return;
   }
   res.status(201).json(result.value);
 }
 
 export async function destroy(req, res) {
-  const result = await politicianService.deletePolitician(req.params.name);
-  if (!result.ok) {
-    res.status(result.error.status).json({ error: result.error.message });
-    return;
-  }
+  const result = await politicianService.deletePolitician(
+    req.params.name,
+    req.user,
+  );
+  if (!result.ok) return sendError(req, res, result.error);
   res.status(200).send();
 }

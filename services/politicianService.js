@@ -1,9 +1,16 @@
 import { Ok, Err } from "../result.js";
-import { getAll, findByName, create, removeByName } from "../repositories/politicianRepository.js";
+import {
+  getAll,
+  findByName,
+  create,
+  removeByName,
+} from "../repositories/politicianRepository.js";
 import { toPoliticianDto } from "../dtos/politicianDto.js";
 
-const REQUIRED_FIELDS = ['name', 'party'];
+const REQUIRED_FIELDS = ["name", "party"];
 const OPTIONAL_FIELDS = ["state", "chamber"]; //making this optional for now for form implementation. Can expand to include this once UI is finalized.
+
+const NOT_LOGGED_IN = { status: 401, message: "You must be logged in." };
 
 const normalizeName = (name) => name.trim().toLowerCase();
 
@@ -65,7 +72,9 @@ export async function listPoliticians(name) {
   return matches.map(toPoliticianDto);
 }
 
-export async function createPolitician(input) {
+export async function createPolitician(input, user) {
+  if (!user) return Err(NOT_LOGGED_IN);
+
   const validation = validatePolitician(input);
 
   if (!validation.ok) return validation;
@@ -82,11 +91,24 @@ export async function createPolitician(input) {
     });
   }
 
-  const created = await create(validation.value);
+  const created = await create({
+    ...validation.value,
+    ownerId: user.id,
+  });
   return Ok(toPoliticianDto(created));
 }
 
-export async function deletePolitician(name) {
+export const isOwnerOrAdmin = (user, politician) => {
+  if (!user) return false;
+  if (user.role === "admin") return true;
+  return (
+    politician.ownerId != null && String(politician.ownerId) === String(user.id)
+  );
+};
+
+export async function deletePolitician(name, user) {
+  if (!user) return Err(NOT_LOGGED_IN);
+
   if (typeof name !== "string" || !name.trim()) {
     return Err({ status: 400, message: "name is required" });
   }
@@ -94,6 +116,12 @@ export async function deletePolitician(name) {
   const existing = await findByName(name.trim());
   if (!existing) {
     return Err({ status: 404, message: "Politician not found" });
+  }
+  if (!isOwnerOrAdmin(user, existing)) {
+    return Err({
+      status: 403,
+      message: "You can only delete politicians you added.",
+    });
   }
 
   await removeByName(name.trim());
