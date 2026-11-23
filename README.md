@@ -76,42 +76,61 @@ This will start a local server at port 3000. So just go to http://localhost:3000
 ## System Diagram
 
 ```
-                               Browser
-                                 |
-                   GET /politicians, /trades, ...
-                                 |
-                                 v
-                       server.js (Express app)
-                                 |
-                                 v
-                            cookieParser
-                                 |
-                                 v
-                        middleware/attatchUser.js
-                   +-------------+--------------+
-                   |                            |
-                   v                            v
-          routes/politician.js          routes/trade.js
-                   |                            |
-                   v                            v
-   controllers/politicianController.js  controllers/tradeController.js
-                   |                            |
-                   v                            v
-     services/politicianService.js     services/tradeService.js
-        |            |                    |            |
-        |            v                    |            v
-        |   dtos/politicianDto.js         |    dtos/tradeDto.js
-        v                                 v
-   repositories/politicianRepository.js  repositories/tradeRepository.js
-                   |                            |
-                   +-------------+--------------+
-                                 |
-                                 v
-                   db.js (mongoose.connect)
-                                 |
-                                 v
-                        MongoDB (database)
-        politicians collection | trades collection
+                                     Browser
+                            (signed sessionId cookie)
+                                        |
+          GET /politicians, /trades, ...   POST /signup, /login, /logout
+                                        |
+                                        v
+                                    server.js
+                                        |
+                                        v
+                                  cookieParser
+                                        |
+                                        v
+                 sessions.js --> middleware/attachUser.js
+                                        |
+          +-----------------------------+-----------------------------+
+          |                             |                             |
+          v                             v                             v
+    routes/auth.js             routes/politician.js            routes/trade.js
+          |                             |                             |
+          |                             v                             |
+          |                middleware/requireLogin.js                 |
+          |                             |
+          |                             |                             |
+          v                             v                             v
+     controllers/                  controllers/                  controllers/
+  authController.js         politicianController.js        tradeController.js
+          |                              |                             |
+          |                             |
+          |                             |                             |
+          v                             v                             v
+      services/                     services/                     services/
+   authService.js             politicianService.js            tradeService.js                                                    
+     |          |               |            |                 |            |
+     |          v               |            v                 |            v
+     |   dtos/userDto.js        |   dtos/politicianDto.js      |    dtos/tradeDto.js
+     v                          v                              v
+ repositories/              repositories/                  repositories/
+ usersRepository.js         politicianRepository.js        tradeRepository.js
+     |                          |                              |
+     v                          |                              |
+ models/userModel.js            |                              |
+ (role: member | admin)         |                              |
+     |                          |                              |
+     +--------------------------+------------------------------+
+                                |
+                                v
+                      db.js (mongoose.connect)
+                                |
+                                v
+                       MongoDB (database)
+       users collection | politicians collection | trades collection
+
+Admin role:
+scripts/seedAdmin.js -> models/userModel.js -> MongoDB
+    (npm run seed:admin -- <email> [admin|member]; the only way to make an admin)
 
 Tests (Jest, ESM):
 __tests__/politicianService.test.js -> services/politicianService.js
