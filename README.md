@@ -293,3 +293,6 @@ I put all the focus fixes in one file, public/focus.js, instead of adding hx-on 
 I put the ownership and role check in the service layer instead of in route middleware. I kept requiredLogin on the routes but ownership needs the record so i kept the check in the service. The alternative method was a route-level requireOwner middleware but I chose the service option because the rule then protects every caller, even one that forgets the middleware, and I can unit test it with a mocked repository and no database. The middleware approach would have cost an extra database lookup, tied the rule to the HTTP layer, and left a security hole on any route where I forgot to attach it.
 
 \-Kehan Xu
+
+I made the authorization so that passwords are never stored in plain text and encrypted and stored in the MongoDB database. I also added the login and signup pages and made sure that the login pages and signup pages linked to each other to make it more user friendly.
+\- Neville Pethani
