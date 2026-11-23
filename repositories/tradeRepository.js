@@ -7,6 +7,11 @@ const tradeSchema = new mongoose.Schema(
     shares: { type: Number, required: true },
     pricePerShare: { type: Number, required: true },
     totalSpent: { type: Number, required: true },
+    ownerId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      default: null,
+    },
   },
   { timestamps: true },
 );
