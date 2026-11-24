@@ -5,6 +5,7 @@ import tradeRouter from "./routes/trade.js";
 import authRouter from './routes/auth.js';
 import { attachUser } from './middleware/attachUser.js';
 import { connectDB } from "./db.js";
+import mongoose from "mongoose";
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,6 +17,15 @@ app.set("views", "views");
 app.use(express.static("public"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+app.get("/health", (req, res) => {
+  const dbUp = mongoose.connection.readyState === 1; // 1 = connected
+  res.status(dbUp ? 200 : 503).json({
+    status: dbUp ? "ok" : "degraded",
+    db: dbUp ? "connected" : "disconnected",
+    uptime: Math.round(process.uptime()),
+  });
+});
 
 app.use(cookieParser(SESSION_SECRET));
 app.use(attachUser);
