@@ -79,35 +79,43 @@ This will start a local server at port 3000. So just go to http://localhost:3000
                                      Browser
                             (signed sessionId cookie)
                                         |
-          GET /politicians, /trades, ...   POST /signup, /login, /logout
+   GET /politicians, /trades, ...   POST /signup, /login, /logout   GET /health
                                         |
                                         v
                                     server.js
                                         |
-                                        v
-                                  cookieParser
-                                        |
-                                        v
-                 sessions.js --> middleware/attachUser.js
-                                        |
-          +-----------------------------+-----------------------------+
+              +-------------------------+------------------------+
+              |                                                  |
+              v                                                  v
+        cookieParser                               GET /health (in server.js,
+              |                                    no login needed) -> JSON
+              v                                    { status, db, uptime }
+ middleware/attachUser.js
+   reads sessionId -> sessions.js
+   looks up the account -> repositories/usersRepository.js
+   -> dtos/userDto.js -> sets req.user (with role)
+              |
+          +---+-------------------------+-----------------------------+
           |                             |                             |
           v                             v                             v
     routes/auth.js             routes/politician.js            routes/trade.js
+          |                 (wrapped in asyncHandler.js)    (wrapped in asyncHandler.js)
           |                             |                             |
-          |                             v                             |
-          |                middleware/requireLogin.js                 |
-          |                             |
+          |                             v                             v
+          |               middleware/requireLogin.js     middleware/requireLogin.js
+          |               on POST and DELETE             on POST and DELETE
+          |               (not logged in -> 401)         (not logged in -> 401)
           |                             |                             |
           v                             v                             v
      controllers/                  controllers/                  controllers/
   authController.js         politicianController.js        tradeController.js
-          |                              |                             |
-          |                             |
           |                             |                             |
           v                             v                             v
       services/                     services/                     services/
-   authService.js             politicianService.js            tradeService.js                                                    
+   authService.js             politicianService.js            tradeService.js
+   (bcrypt hash/compare)      isOwnerOrAdmin(user, politician) isOwnerOrAdmin(user, trade)
+                              after loading the record:        after loading the record:
+                              not owner or admin -> 403        not owner or admin -> 403
      |          |               |            |                 |            |
      |          v               |            v                 |            v
      |   dtos/userDto.js        |   dtos/politicianDto.js      |    dtos/tradeDto.js
@@ -128,6 +136,10 @@ This will start a local server at port 3000. So just go to http://localhost:3000
                        MongoDB (database)
        users collection | politicians collection | trades collection
 
+Shared helpers:
+asyncHandler.js -> wraps every async route handler so errors reach the error middleware in server.js
+result.js -> Ok / Err, returned by every service (authService, politicianService, tradeService)
+
 Admin role:
 scripts/seedAdmin.js -> models/userModel.js -> MongoDB
     (npm run seed:admin -- <email> [admin|member]; the only way to make an admin)
@@ -141,13 +153,14 @@ __tests__/tradeService.test.js -> services/tradeService.js
 
 Response path:
 service -> controller
-  -> res.render('trades' / 'politicians' / 'details'), or a partial
+  -> res.render('trades' / 'politicians' / 'details' / 'login' / 'signup'), or a partial
      from views/partials/ for HTMX requests
   -> views/*.ejs + views/partials/*.ejs
   -> HTML sent to Browser
 
 Static files:
-Browser -> public/style.css, public/index.html
+Browser -> public/style.css, public/index.html, public/focus.js
+  (focus.js keeps keyboard focus in place after HTMX add, delete, and errors)
 
 Tailwind:
 src/input.css -> public/style.css
@@ -228,6 +241,23 @@ HTMX: When you do the form, the form goes through HTMX instead of a seperate for
 tests: test files are stored at `__test__` and to run them, you just run `npm test`
 
 Tailwind: Intergrated old css file into the HTML/EJS files through tailwind, added different formats to shrinking/enlarging window (textboxes are stacked when small, in a row when large to allow for a better user experience.). Additonally, fixed overflow for smaller windows and removed horizontal scroll bar.
+
+## Sprint 4: Signing Up and Logging In
+
+Go to /signup, enter an email and a password (at least 8 characters), and you get logged in and sent to the home page. To log in later, go to /login. We used a signed session cookie: logging in makes a session id on the server (sessions.js) and sends it back in an HttpOnly cookie signed with SESSION_SECRET. We picked sessions over tokens because our pages are server-rendered EJS, so the browser sends the cookie on every request by itself and we didn't need any client code to store or attach a token.
+
+## Sprint 4: Testing the Ownership Rule
+
+You can only delete trades and politicians you added, unless you're an admin. To test it with two accounts:
+1. Sign up as A (a@test.com) and add a trade on /trades.
+2. Log out, sign up as B (b@test.com), and click Delete on A's trade. You get a 403 "You can only delete trades you created."
+3. Make B an admin with `npm run seed:admin -- b@test.com`, log in as B again, and delete A's trade. It works.
+
+If you're not logged in at all, requireLogin stops the request before the service: the page sends you to /login, and an HTMX or JSON request gets a 401.
+
+## Sprint 4: Health Check
+
+Run `curl -i localhost:3000/health`. It returns 200 with JSON like `{"status":"ok","db":"connected","uptime":42}` and doesn't need a login. If MongoDB is down, it returns 503 with `"status":"degraded"`.
 
 ## Sprint 4: Accessibility Audit
 
