@@ -249,6 +249,7 @@ Go to /signup, enter an email and a password (at least 8 characters), and you ge
 ## Sprint 4: Testing the Ownership Rule
 
 You can only delete trades and politicians you added, unless you're an admin. To test it with two accounts:
+
 1. Sign up as A (a@test.com) and add a trade on /trades.
 2. Log out, sign up as B (b@test.com), and click Delete on A's trade. You get a 403 "You can only delete trades you created."
 3. Make B an admin with `npm run seed:admin -- b@test.com`, log in as B again, and delete A's trade. It works.
@@ -324,5 +325,5 @@ I put the ownership and role check in the service layer instead of in route midd
 
 \-Kehan Xu
 
-I made the authorization so that passwords are never stored in plain text and encrypted and stored in the MongoDB database. I also added the login and signup pages and made sure that the login pages and signup pages linked to each other to make it more user friendly.
+I made the decision to store passwords securely using bcrypt hashing rather than storing them in plain text, so that users' passwords are protected in the MongoDB database. I also used server-side sessions for authentication instead of signed tokens such as JWTs, because this allows the app to remove a user's session from sessions.js when they log out, meaning their old cookie stops working straight away. Using JWTs would mean that a token could remain valid after logout until it expires, making it less suitable for how this app handles authentication. I also linked the login and signup pages so users can easily move between them.
 \- Neville Pethani
